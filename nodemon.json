@@ -1,0 +1,13 @@
+{
+  "watch": [
+    "src",
+    "homebridge/config.json"
+  ],
+  "ext": "ts",
+  "ignore": [],
+  "exec": "tsc && homebridge -I -D -U ./homebridge -P .",
+  "signal": "SIGTERM",
+  "env": {
+    "NODE_OPTIONS": "--trace-warnings"
+  }
+}

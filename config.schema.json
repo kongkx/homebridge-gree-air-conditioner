@@ -1,0 +1,86 @@
+{
+  "pluginAlias": "GreeAirConditioner",
+  "pluginType": "platform",
+  "singular": true,
+  "schema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "title": "Name",
+        "type": "string",
+        "default": "Gree AC"
+      },
+      "port": {
+        "title": "Port",
+        "type": "integer",
+        "default": 7002,
+        "description": "UDP socket server port to bind"
+      },
+      "scanAddress": {
+        "title": "Scan Address",
+        "type": "string",
+        "format": "ipv4",
+        "default": "192.168.1.255"
+      },
+      "scanCount": {
+        "title": "Scan count",
+        "type": "integer",
+        "placeholder": 10,
+        "minimum": 3
+      },
+      "statusUpdateInterval": {
+        "title": "Status Update Interval (Second)",
+        "type": "integer",
+        "default": 3,
+        "minimum": 1,
+        "maximum": 600
+      },
+      "devices": {
+        "title": "Devices",
+        "type": "array",
+        "items": {
+          "title": "Device",
+          "type": "object",
+          "properties": {
+            "mac": {
+              "title": "Mac Address (Serial Number)",
+              "type": "string",
+              "required": true
+            },
+            "name": {
+              "title": "Custom Device Name",
+              "type": "string"
+            },
+            "sensorOffset": {
+              "title": "Temperature Offset",
+              "type": "integer",
+              "default": 40,
+              "oneOf": [
+                { "title": "40", "enum": [40] },
+                { "title": "0", "enum": [0] }
+              ],
+              "required": true
+            },
+            "defaultSpeed": {
+              "title": "Default Fan Speed",
+              "type": "integer",
+              "default": 3,
+              "oneOf": [
+                { "title": "low", "enum": [1] },
+                { "title": "medium-low", "enum": [2] },
+                { "title": "medium", "enum": [3] },
+                { "title": "medium-high", "enum": [4] },
+                { "title": "high", "enum": [5] }
+              ],
+              "required": true
+            },
+            "disabled": {
+              "title": "Disabled",
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    }
+  }
+}

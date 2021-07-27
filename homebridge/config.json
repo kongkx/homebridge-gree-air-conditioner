@@ -1,0 +1,27 @@
+{
+  "bridge": {
+    "name": "Gree Platform Development",
+    "username": "8C:85:90:8A:C7:84",
+    "port": 51828
+  },
+  "description": "This is an configuration file for local development of the Gree platform plugin",
+  "accessories": [
+  ],
+  "platforms": [
+    {
+      "platform": "GreeAirConditioner",
+      "name": "Gree",
+      "port": 7002,
+      "scanCount": 3,
+      "scanAddress": "192.168.50.255",
+      "statusUpdateInterval": 3,
+      "sensorOffset": 40,
+      "minimumTargetTemperature": 16,
+      "maximumTargetTemperature": 30,
+      "devices": [
+        { "mac": "c8f742f85ad9", "disabled": true },
+        { "mac": "c8f74290a147", "disabled": true }
+      ]
+    }
+  ]
+}
