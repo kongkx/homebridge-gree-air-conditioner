@@ -120,4 +120,4 @@ dist
 .pnp.*
 
 homebridge/*
-!homebridge/config.json
+!homebridge/config.json.example

@@ -64,6 +64,7 @@ From Gree+ App
 ## Features/TODO
 
 - [x] 设备独立设置
+- [ ] 像遥控器那样缓存模式状态
 
 - [x] 电源控制
 - [x] 温度调节
