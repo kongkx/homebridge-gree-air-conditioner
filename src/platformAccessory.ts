@@ -15,6 +15,7 @@ import { HeaterCoolerToggleSwitch } from './HeaterCoolerToggleSwitch';
 export class GreeAirConditioner {
   // services
   private HeaterCooler: Service;
+  private Fan: Service;
 
   private PowerSwitch: HeaterCoolerToggleSwitch;
   private QuietModeSwitch: HeaterCoolerToggleSwitch;
@@ -164,19 +165,24 @@ export class GreeAirConditioner {
       .on('get', this.getCharacteristic.bind(this, 'units'))
       .on('set', this.setCharacteristic.bind(this, 'units'));
 
-    this.HeaterCooler.getCharacteristic(
-      this.platform.Characteristic.RotationSpeed,
-    )
+    this.Fan = this.HeaterCooler =
+      this.accessory.getService(this.platform.messages.fanSpeed) ||
+      this.accessory.addService(
+        this.platform.Service.Fanv2,
+        this.platform.messages.fanSpeed,
+      );
+    this.Fan.getCharacteristic(this.platform.Characteristic.Active).on(
+      'get',
+      this.getCharacteristic.bind(this, 'power'),
+    );
+    this.Fan.getCharacteristic(this.platform.Characteristic.RotationSpeed)
       .setProps({
         minValue: 0,
-        maxValue: 7,
+        maxValue: 5,
         minStep: 1,
       })
       .on('get', this.getCharacteristic.bind(this, 'speed'))
       .on('set', this.setCharacteristic.bind(this, 'speed'));
-
-
-
   }
 
   getCharacteristic(key, callback) {
@@ -231,7 +237,6 @@ export class GreeAirConditioner {
   }
 
   set deviceActive(value) {
-    // TODO: avoid active toggle from accessory open
     if (this.deviceActive === value || this.isPending) {
       return;
     }
@@ -364,66 +369,71 @@ export class GreeAirConditioner {
 
   get speed() {
     const speed = this.status[commands.speed.code] as number;
-    const quietMode = this.status[commands.quietMode.code];
-    const powerfulMode = this.status[commands.powerfulMode.code];
-    if (
-      quietMode === commands.quietMode.value.on &&
-      speed === commands.speed.value.low
-    ) {
-      return 1;
-    } else if (
-      powerfulMode === commands.quietMode.value.on &&
-      speed === commands.speed.value.high
-    ) {
-      return 7;
-    } else if (speed === 0) {
-      return speed;
-    } else {
-      return speed + 1;
-    }
+    return speed || 0;
+    // const speed = this.status[commands.speed.code] as number;
+    // const quietMode = this.status[commands.quietMode.code];
+    // const powerfulMode = this.status[commands.powerfulMode.code];
+    // if (
+    //   quietMode === commands.quietMode.value.on &&
+    //   speed === commands.speed.value.low
+    // ) {
+    //   return 1;
+    // } else if (
+    //   powerfulMode === commands.quietMode.value.on &&
+    //   speed === commands.speed.value.high
+    // ) {
+    //   return 7;
+    // } else if (speed === 0) {
+    //   return speed;
+    // } else {
+    //   return speed + 1;
+    // }
   }
 
   set speed(value) {
     if (value === this.speed) {
       return;
     }
-    if (value === 0) {
-      // 自动
-      this.sendCommand({
-        [commands.quietMode.code]: commands.quietMode.value.off,
-        [commands.powerfulMode.code]: commands.powerfulMode.value.off,
-        [commands.speed.code]: commands.speed.value.auto,
-      });
-    } else if (value === 1) {
-      // 静音
-      this.sendCommand({
-        [commands.quietMode.code]: commands.quietMode.value.on,
-        [commands.powerfulMode.code]: commands.powerfulMode.value.off,
-        [commands.speed.code]: commands.speed.value.low,
-      });
-    } else if (value === 7) {
-      // 强劲
-      this.sendCommand({
-        [commands.quietMode.code]: commands.quietMode.value.off,
-        [commands.powerfulMode.code]: commands.powerfulMode.value.on,
-        [commands.speed.code]: commands.speed.value.high,
-      });
-    } else {
-      this.sendCommand({
-        [commands.quietMode.code]: commands.quietMode.value.off,
-        [commands.powerfulMode.code]: commands.powerfulMode.value.off,
-        [commands.speed.code]: value - 1,
-      });
+    if (!this.power) {
+      return;
     }
+    this.sendCommand({
+      [commands.quietMode.code]: commands.quietMode.value.off,
+      [commands.powerfulMode.code]: commands.powerfulMode.value.off,
+      [commands.speed.code]: value,
+    });
+    // if (value === 0) {
+    //   // 自动
+    //   this.sendCommand({
+    //     [commands.quietMode.code]: commands.quietMode.value.off,
+    //     [commands.powerfulMode.code]: commands.powerfulMode.value.off,
+    //     [commands.speed.code]: commands.speed.value.auto,
+    //   });
+    // } else if (value === 1) {
+    //   // 静音
+    //   this.sendCommand({
+    //     [commands.quietMode.code]: commands.quietMode.value.on,
+    //     [commands.powerfulMode.code]: commands.powerfulMode.value.off,
+    //     [commands.speed.code]: commands.speed.value.low,
+    //   });
+    // } else if (value === 7) {
+    //   // 强劲
+    //   this.sendCommand({
+    //     [commands.quietMode.code]: commands.quietMode.value.off,
+    //     [commands.powerfulMode.code]: commands.powerfulMode.value.on,
+    //     [commands.speed.code]: commands.speed.value.high,
+    //   });
+    // } else {
+    //   this.sendCommand({
+    //     [commands.quietMode.code]: commands.quietMode.value.off,
+    //     [commands.powerfulMode.code]: commands.powerfulMode.value.off,
+    //     [commands.speed.code]: value - 1,
+    //   });
+    // }
   }
 
   get light() {
-    switch (this.status[commands.light.code]) {
-      case commands.light.value.on:
-        return true;
-      case commands.light.value.off:
-        return false;
-    }
+    return this.status[commands.light.code] === commands.light.value.on;
   }
 
   set light(value) {
@@ -439,8 +449,10 @@ export class GreeAirConditioner {
   }
 
   get quietMode() {
-    return this.status[commands.quietMode.code] === commands.quietMode.value.on &&
-    this.status[commands.speed.code] === commands.speed.value.low;
+    return (
+      this.status[commands.quietMode.code] === commands.quietMode.value.on &&
+      this.status[commands.speed.code] === commands.speed.value.low
+    );
   }
 
   set quietMode(value) {
@@ -464,7 +476,8 @@ export class GreeAirConditioner {
 
   get powerfulMode() {
     return (
-      this.status[commands.powerfulMode.code] === commands.powerfulMode.value.on &&
+      this.status[commands.powerfulMode.code] ===
+        commands.powerfulMode.value.on &&
       this.status[commands.speed.code] === commands.speed.value.high
     );
   }
@@ -489,7 +502,10 @@ export class GreeAirConditioner {
   }
 
   get verticalSwing() {
-    return this.status[commands.swingVertical.code] === commands.swingVertical.value.full;
+    return (
+      this.status[commands.swingVertical.code] ===
+      commands.swingVertical.value.full
+    );
   }
 
   set verticalSwing(value) {
@@ -508,7 +524,10 @@ export class GreeAirConditioner {
   }
 
   get horizontalSwing() {
-    return this.status[commands.swingHorizontal.code] === commands.swingHorizontal.value.full;
+    return (
+      this.status[commands.swingHorizontal.code] ===
+      commands.swingHorizontal.value.full
+    );
   }
 
   set horizontalSwing(value) {
@@ -539,7 +558,10 @@ export class GreeAirConditioner {
     }
     if (value) {
       // cache current mode with key: last
-      if (this.power && this.status[commands.mode.code] !== commands.mode.value.dry) {
+      if (
+        this.power &&
+        this.status[commands.mode.code] !== commands.mode.value.dry
+      ) {
         this.cacheMode('last');
       }
       this.sendCommand({
@@ -572,7 +594,10 @@ export class GreeAirConditioner {
     }
     if (value) {
       // cache current mode with key: last
-      if (this.power && this.status[commands.mode.code] !== commands.mode.value.fan) {
+      if (
+        this.power &&
+        this.status[commands.mode.code] !== commands.mode.value.fan
+      ) {
         this.cacheMode('last');
       }
       this.sendCommand({
@@ -638,7 +663,7 @@ export class GreeAirConditioner {
         case 'dat': // update status
           this.updateStatus(fieldsToObject(pack.cols, pack.dat));
           break;
-        case 'res':
+        case 'res': // command response
           this.updateStatus(fieldsToObject(pack.opt, pack.p || pack.val));
           break;
       }
@@ -677,9 +702,6 @@ export class GreeAirConditioner {
       p: values,
     };
     this.sendMessage(message);
-    setTimeout(() => {
-      this.requestDeviceStatus();
-    }, 1000);
   }
 
   updateStatus(patch) {
@@ -712,8 +734,9 @@ export class GreeAirConditioner {
       ).updateValue(this.speed);
     }
     if (patch[commands.mode.code] !== undefined) {
-      this.HeaterCooler.getCharacteristic(this.platform.Characteristic.TargetHeaterCoolerState)
-        .updateValue(this.targetState);
+      this.HeaterCooler.getCharacteristic(
+        this.platform.Characteristic.TargetHeaterCoolerState,
+      ).updateValue(this.targetState);
       this.DryModeToggle.update();
       this.FanModeToggle.update();
     }
@@ -803,7 +826,6 @@ export class GreeAirConditioner {
 
     return cache;
   }
-
 }
 
 const fieldsToObject = (cols, values) => {

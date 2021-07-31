@@ -41,4 +41,5 @@ export interface LocaleMessages {
   light: string;
   dryMode: string;
   fanMode: string;
+  fanSpeed: string;
 }

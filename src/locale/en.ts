@@ -10,6 +10,7 @@ const messages: LocaleMessages = {
   light: 'Light',
   fanMode: 'Fan Mode',
   dryMode: 'Dry Mode',
+  fanSpeed: 'Fan Speed',
 };
 
 export default messages;

@@ -10,6 +10,7 @@ const messages: LocaleMessages = {
   light: '指示灯',
   fanMode: '送风模式',
   dryMode: '除湿模式',
+  fanSpeed: '风速',
 };
 
 export default messages;
