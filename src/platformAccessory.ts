@@ -65,11 +65,17 @@ export class GreeAirConditioner {
       );
 
     // 电源控制
-    this.PowerSwitch = new HeaterCoolerToggleSwitch(this, 'power', 'Power');
+    this.PowerSwitch = new HeaterCoolerToggleSwitch(
+      this,
+      'power',
+      this.platform.messages.power,
+    );
 
     this.HeaterCooler =
-      this.accessory.getService('Mode') ||
-      this.accessory.addService(this.platform.Service.HeaterCooler, 'Mode');
+      this.accessory.getService(this.platform.messages.mode) ||
+      this.accessory.addService(this.platform.Service.HeaterCooler,
+        this.platform.messages.mode,
+      );
 
     this.HeaterCooler.getCharacteristic(this.platform.Characteristic.Active)
       .on('get', this.getCharacteristic.bind(this, 'deviceActive'))
@@ -88,7 +94,7 @@ export class GreeAirConditioner {
       .on('get', this.getCharacteristic.bind(this, 'targetState'))
       .on('set', this.setCharacteristic.bind(this, 'targetState'));
 
-    // TODO: Optional Characteristic
+    // Optional Characteristic
     this.HeaterCooler.getCharacteristic(
       this.platform.Characteristic.CoolingThresholdTemperature,
     )
@@ -127,26 +133,30 @@ export class GreeAirConditioner {
       .on('get', this.getCharacteristic.bind(this, 'speed'))
       .on('set', this.getCharacteristic.bind(this, 'speed'));
 
-    this.LightSwitch = new HeaterCoolerToggleSwitch(this, 'light', 'Light');
+    this.LightSwitch = new HeaterCoolerToggleSwitch(
+      this,
+      'light',
+      this.platform.messages.light,
+    );
     this.QuietModeSwitch = new HeaterCoolerToggleSwitch(
       this,
       'quietMode',
-      'Quiet Mode',
+      this.platform.messages.quietMode,
     );
     this.PowerfulModeSwitch = new HeaterCoolerToggleSwitch(
       this,
       'powerfulMode',
-      'Powerful Mode',
+      this.platform.messages.powerfulMode,
     );
     this.VerticalSwing = new HeaterCoolerToggleSwitch(
       this,
       'verticalSwing',
-      'Vertical Swing',
+      this.platform.messages.verticalSwing,
     );
     this.HorizontalSwing = new HeaterCoolerToggleSwitch(
       this,
       'horizontalSwing',
-      'Horizontal Swing',
+      this.platform.messages.horizontalSwing,
     );
   }
 
@@ -654,9 +664,7 @@ export class GreeAirConditioner {
   }
 
   getName() {
-    return (
-      this.deviceConfig?.name || this.accessory.context.device.name
-    );
+    return this.deviceConfig?.name || this.accessory.context.device.name;
   }
 
   getCols() {

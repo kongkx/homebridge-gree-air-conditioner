@@ -22,6 +22,7 @@ export const DEFAULT_PLATFORM_CONFIG = {
   name: 'Gree Air Conditioner',
   port: 7002,
   scanCount: 10,
+  language: 'zh-CN',
   scanTimout: 3000,
   scanAddress: '192.168.1.255',
   defaultValue: DEFAULT_DEVICE_CONFIG,
@@ -29,3 +30,13 @@ export const DEFAULT_PLATFORM_CONFIG = {
 };
 
 export const UDP_SCAN_PORT = 7000;
+
+export interface LocaleMessages {
+  power: string;
+  mode: string;
+  verticalSwing: string;
+  horizontalSwing: string;
+  quietMode: string;
+  powerfulMode: string;
+  light: string;
+}

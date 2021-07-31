@@ -10,6 +10,15 @@
         "type": "string",
         "default": "Gree AC"
       },
+      "language": {
+        "title": "Language",
+        "type": "string",
+        "default": "zh-CN",
+        "oneOf": [
+          { "title": "简体中文", "enum": ["zh-CN"] },
+          { "title": "English", "enum": ["en"] }
+        ]
+      },
       "port": {
         "title": "Port",
         "type": "integer",

@@ -2,7 +2,7 @@ import dgram from 'dgram';
 import crypto from './crypto';
 import { API, DynamicPlatformPlugin, Logger, PlatformAccessory, PlatformConfig, Service, Characteristic } from 'homebridge';
 
-import { PLATFORM_NAME, PLUGIN_NAME, DEFAULT_PLATFORM_CONFIG, UDP_SCAN_PORT } from './settings';
+import { PLATFORM_NAME, PLUGIN_NAME, DEFAULT_PLATFORM_CONFIG, UDP_SCAN_PORT, LocaleMessages } from './settings';
 import { GreeAirConditioner } from './platformAccessory';
 
 export interface GreeAcDeviceConfig {
@@ -10,6 +10,14 @@ export interface GreeAcDeviceConfig {
   sensorOffset: number;
   defaultSpeed: number;
   disabled?: boolean;
+}
+
+function readLocaleMessages(locale) {
+  try {
+    return require(`./locale/${locale}`);
+  } catch (err) {
+    return require('./locale/en');
+  }
 }
 
 /**
@@ -28,6 +36,7 @@ export class GreePlatform implements DynamicPlatformPlugin {
   initializedDevices: Record<string, boolean>;
   scanCount: number;
   timer: NodeJS.Timeout | undefined;
+  messages: LocaleMessages;
 
   constructor(
     public readonly log: Logger,
@@ -43,6 +52,7 @@ export class GreePlatform implements DynamicPlatformPlugin {
     };
     this.log.debug('Config: %j', this.config);
     this.scanCount = 0;
+    this.messages = readLocaleMessages(this.config.language).default;
 
     // When this event is fired it means Homebridge has restored all cached accessories from disk.
     // Dynamic Platform plugins should only register new accessories after this event was fired,
