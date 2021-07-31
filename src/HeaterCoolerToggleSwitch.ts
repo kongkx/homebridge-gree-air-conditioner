@@ -9,7 +9,7 @@ export class HeaterCoolerToggleSwitch {
 
     constructor(
         private parent: GreeAirConditioner,
-        private attribute: 'power' | 'verticalSwing' | 'horizontalSwing' | 'quietMode' | 'powerfulMode' | 'light',
+        private attribute: 'power' | 'verticalSwing' | 'horizontalSwing' | 'quietMode' | 'powerfulMode' | 'light' | 'dryMode' | 'fanMode',
         private displayName: string,
     ) {
       this.service = this.parent.accessory.getService(this.displayName) ||

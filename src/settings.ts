@@ -39,4 +39,6 @@ export interface LocaleMessages {
   quietMode: string;
   powerfulMode: string;
   light: string;
+  dryMode: string;
+  fanMode: string;
 }

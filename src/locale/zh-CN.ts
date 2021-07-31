@@ -8,6 +8,8 @@ const messages: LocaleMessages = {
   quietMode: '静音模式',
   powerfulMode: '强劲模式',
   light: '指示灯',
+  fanMode: '送风模式',
+  dryMode: '除湿模式',
 };
 
 export default messages;
