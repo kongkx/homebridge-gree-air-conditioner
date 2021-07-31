@@ -75,7 +75,21 @@ From Gree+ App
 - [x] 左右扫风
 - [x] 上下扫风
 - [x] 指示灯控制
-## Developing
+## 开发
+
+1. 安装 homebridge 以及 homebridge-config-ui-x
+
+```bash
+npm install -g homebridge homebridge-config-ui-x
+```
+
+2. 准备配置文件
+
+```
+cp homebridge/config.json.example homebridge/config.json    
+```
+
+2. 启动开发服务
 
 ```
 npm run watch

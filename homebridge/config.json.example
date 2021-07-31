@@ -9,6 +9,10 @@
   ],
   "platforms": [
     {
+      "platform": "config",
+      "port": 8581
+    },
+    {
       "platform": "GreeAirConditioner",
       "name": "Gree",
       "port": 7002,
@@ -19,8 +23,7 @@
       "minimumTargetTemperature": 16,
       "maximumTargetTemperature": 30,
       "devices": [
-        { "mac": "c8f742f85ad9", "disabled": true },
-        { "mac": "c8f74290a147", "disabled": true }
+        { "mac": "c8f742f85ad9", "disabled": true }
       ]
     }
   ]

@@ -5,7 +5,7 @@
   ],
   "ext": "ts",
   "ignore": [],
-  "exec": "tsc && homebridge -I -D -U ./homebridge -P .",
+  "exec": "tsc && homebridge -I -D -U ./homebridge",
   "signal": "SIGTERM",
   "env": {
     "NODE_OPTIONS": "--trace-warnings"
