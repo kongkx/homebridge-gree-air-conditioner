@@ -64,7 +64,7 @@ From Gree+ App
 ## Features/TODO
 
 - [x] 设备独立设置
-- [ ] 像遥控器那样缓存模式状态
+- [x] 缓存模式状态，在切换模式时 像遥控器那样 保留原模式下的设置
 - [x] 本地化语言，支持简体中文以及英文，方便通过 Siri 控制模式开关。 如 ”Siri， 打开静音模式“
 
 - [x] 电源控制
@@ -108,15 +108,15 @@ npm run watch
 
 ### 模式
 
-模式切换按钮，会保存有 `SetTem`, `TemSen`, `WdSpd` 的数据
+模式切换按钮，会保存有温度设置、风速等数据
 
 | label | code |
 | ----- | ---- |
-| 自动 | `{ Mod: 0, SetTem: 25, TemSen: 67, WdSpd: 3 }` |
-| 制冷 | `{ Mod: 1, SetTem: 28, TemSen: 68, WpSpd: 0 }` |
-| 除湿 | `{ Mod: 2, SetTem: 25, TemSen: 67, WpSpd: 3 }` |
-| 送风 | `{ Mod: 3, SetTem: 26, TemSen: 67, WpSpd: 3 }` |
-| 制热 | `{ Mod: 4, SetTem: 27, TemSen: 64, WpSpd: 3 }` |
+| 自动 | `{ Mod: 0, SetTem: 25, WdSpd: 3, Tur: 0, Quiet: 0 }` |
+| 制冷 | `{ Mod: 1, SetTem: 28, WpSpd: 0, Tur: 0, Quiet: 0 }` |
+| 除湿 | `{ Mod: 2, SetTem: 25, WpSpd: 3, Tur: 0, Quiet: 0 }` |
+| 送风 | `{ Mod: 3, SetTem: 26, WpSpd: 3, Tur: 0, Quiet: 0 }` |
+| 制热 | `{ Mod: 4, SetTem: 27, WpSpd: 3, Tur: 0, Quiet: 0 }` |
 
 ### 风速
 

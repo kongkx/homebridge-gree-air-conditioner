@@ -15,7 +15,7 @@ export const DEFAULT_DEVICE_CONFIG = {
   maximumTargetTemperature: 30,
   sensorOffset: 40,
   defaultSpeed: commands.speed.value.medium,
-  statusUpdateInterval: 3,
+  statusUpdateInterval: 20,
 };
 
 export const DEFAULT_PLATFORM_CONFIG = {

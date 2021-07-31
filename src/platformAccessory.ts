@@ -73,7 +73,8 @@ export class GreeAirConditioner {
 
     this.HeaterCooler =
       this.accessory.getService(this.platform.messages.mode) ||
-      this.accessory.addService(this.platform.Service.HeaterCooler,
+      this.accessory.addService(
+        this.platform.Service.HeaterCooler,
         this.platform.messages.mode,
       );
 
@@ -207,7 +208,6 @@ export class GreeAirConditioner {
   }
 
   set deviceActive(value) {
-    this.platform.log.debug('deviceActive', value);
     if (this.deviceActive !== value) {
       this.sendCommand({
         [commands.power.code]:
@@ -257,7 +257,6 @@ export class GreeAirConditioner {
 
   set targetState(value) {
     let mode;
-    this.platform.log.debug('*****************', value);
     switch (value) {
       case this.platform.Characteristic.TargetHeaterCoolerState.AUTO:
         mode = commands.mode.value.auto;
@@ -271,12 +270,38 @@ export class GreeAirConditioner {
     if (mode === undefined || mode === this.status[commands.mode.code]) {
       return;
     }
-    const command = {
-      [commands.mode.code]: mode,
-    };
+    let command;
+    if (this.accessory.context.modeStates?.[mode]) {
+      command = this.accessory.context.modeStates?.[mode];
+    } else {
+      command = {
+        [commands.mode.code]: mode,
+      };
+    }
     if (!this.power) {
       command[commands.power.code] = commands.power.value.on;
     }
+    // cache mode info;
+    if (!this.accessory.context.modeStates) {
+      this.accessory.context.modeStates = {};
+    }
+    const currentMode = this.status[commands.mode.code] as number;
+    if (currentMode !== undefined) {
+      this.accessory.context.modeStates[currentMode] = {
+        [commands.mode.code]: this.status[commands.mode.code],
+        [commands.targetTemperature.code]:
+          this.status[commands.targetTemperature.code],
+        [commands.speed.code]: this.status[commands.speed.code],
+        [commands.quietMode.code]: this.status[commands.quietMode.code],
+        [commands.powerfulMode.code]: this.status[commands.powerfulMode.code],
+      };
+      this.platform.log.debug(
+        `[${this.getDeviceLabel()}] cache status: %s, %j`,
+        currentMode,
+        this.accessory.context.modeStates[currentMode],
+      );
+    }
+
     this.sendCommand(command);
   }
 
@@ -603,6 +628,9 @@ export class GreeAirConditioner {
       p: values,
     };
     this.sendMessage(message);
+    setTimeout(() => {
+      this.requestDeviceStatus();
+    }, 1000);
   }
 
   updateStatus(patch) {
