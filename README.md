@@ -37,6 +37,7 @@ npm install homebridge-gree-air-conditioner -g
                 "sensorOffset": 40,
                 "defaultSpeed": 3,
                 "statusUpdateInterval": 3,
+                "switches": "power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode"
             },
             "devices": [
                 { 
@@ -66,6 +67,7 @@ From Gree+ App
 - [x] 设备独立设置
 - [x] 缓存模式状态，在切换模式时 像遥控器那样 保留原模式下的设置
 - [x] 本地化语言，支持简体中文以及英文，方便通过 Siri 控制模式开关。 如 ”Siri， 打开静音模式“
+- [x] 控制功能开关的启动。示例：`power,light` 仅启用电源，灯光控制开关，其他强劲模式、静音模式开关均不启用。
 
 - [x] 电源控制
 - [x] 温度调节

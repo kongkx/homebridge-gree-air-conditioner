@@ -37,12 +37,46 @@
         "placeholder": 10,
         "minimum": 3
       },
-      "statusUpdateInterval": {
-        "title": "Status Update Interval (Second)",
-        "type": "integer",
-        "default": 3,
-        "minimum": 1,
-        "maximum": 600
+      "defaultValue": {
+        "title": "Default Settings",
+        "type": "object",
+        "properties": {
+          "statusUpdateInterval": {
+            "title": "Status Update Interval (Second)",
+            "type": "integer",
+            "default": 3,
+            "minimum": 1,
+            "maximum": 600
+          },
+          "sensorOffset": {
+            "title": "Temperature Offset",
+            "type": "integer",
+            "default": 40,
+            "oneOf": [
+              { "title": "40", "enum": [40] },
+              { "title": "0", "enum": [0] }
+            ]
+          },
+          "defaultSpeed": {
+            "title": "Default Fan Speed",
+            "type": "integer",
+            "default": 3,
+            "oneOf": [
+              { "title": "low", "enum": [1] },
+              { "title": "medium-low", "enum": [2] },
+              { "title": "medium", "enum": [3] },
+              { "title": "medium-high", "enum": [4] },
+              { "title": "high", "enum": [5] }
+            ],
+            "required": true
+          },
+          "switches": {
+            "title": "Switches",
+            "type": "string",
+            "description": "Switches to enable.",
+            "placeholder": "power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode"
+          }
+        }
       },
       "devices": {
         "title": "Devices",
@@ -59,6 +93,10 @@
             "name": {
               "title": "Custom Device Name",
               "type": "string"
+            },
+            "disabled": {
+              "title": "Disabled",
+              "type": "boolean"
             },
             "sensorOffset": {
               "title": "Temperature Offset",
@@ -83,9 +121,11 @@
               ],
               "required": true
             },
-            "disabled": {
-              "title": "Disabled",
-              "type": "boolean"
+            "switches": {
+              "title": "Switches",
+              "type": "string",
+              "description": "Switches to enable. commas separated string. options: power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode",
+              "placeholder": "power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode"
             }
           }
         }

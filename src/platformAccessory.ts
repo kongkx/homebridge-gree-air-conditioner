@@ -3,8 +3,8 @@ import { Socket } from 'dgram';
 import crypto from './crypto';
 import commands from './commands';
 
-import { GreePlatform, GreeAcDeviceConfig } from './platform';
-import { DEFAULT_PLATFORM_CONFIG } from './settings';
+import { GreePlatform } from './platform';
+import { DEFAULT_PLATFORM_CONFIG, DeviceConfig, SwitchName } from './settings';
 import { HeaterCoolerToggleSwitch } from './HeaterCoolerToggleSwitch';
 
 /**
@@ -12,19 +12,20 @@ import { HeaterCoolerToggleSwitch } from './HeaterCoolerToggleSwitch';
  * An instance of this class is created for each accessory your platform registers
  * Each accessory may expose multiple services of different service types.
  */
+
 export class GreeAirConditioner {
   // services
   private HeaterCooler: Service;
   private Fan: Service;
 
-  private PowerSwitch: HeaterCoolerToggleSwitch;
-  private QuietModeSwitch: HeaterCoolerToggleSwitch;
-  private LightSwitch: HeaterCoolerToggleSwitch;
-  private PowerfulModeSwitch: HeaterCoolerToggleSwitch;
-  private VerticalSwing: HeaterCoolerToggleSwitch;
-  private HorizontalSwing: HeaterCoolerToggleSwitch;
-  private DryModeToggle: HeaterCoolerToggleSwitch;
-  private FanModeToggle: HeaterCoolerToggleSwitch;
+  private PowerSwitch?: HeaterCoolerToggleSwitch;
+  private QuietModeSwitch?: HeaterCoolerToggleSwitch;
+  private LightSwitch?: HeaterCoolerToggleSwitch;
+  private PowerfulModeSwitch?: HeaterCoolerToggleSwitch;
+  private VerticalSwing?: HeaterCoolerToggleSwitch;
+  private HorizontalSwing?: HeaterCoolerToggleSwitch;
+  private DryModeToggle?: HeaterCoolerToggleSwitch;
+  private FanModeToggle?: HeaterCoolerToggleSwitch;
 
   private key: string | undefined;
   public socket: Socket;
@@ -37,7 +38,7 @@ export class GreeAirConditioner {
   constructor(
     public readonly platform: GreePlatform,
     public readonly accessory: PlatformAccessory,
-    public readonly deviceConfig: GreeAcDeviceConfig,
+    public readonly deviceConfig: DeviceConfig,
   ) {
     this.socket = platform.socket;
     this.binded = false;
@@ -69,49 +70,14 @@ export class GreeAirConditioner {
         this.accessory.context.device.ver,
       );
 
-    // 电源控制
-    this.PowerSwitch = new HeaterCoolerToggleSwitch(
-      this,
-      'power',
-      this.platform.messages.power,
-    );
-
-    this.LightSwitch = new HeaterCoolerToggleSwitch(
-      this,
-      'light',
-      this.platform.messages.light,
-    );
-    this.QuietModeSwitch = new HeaterCoolerToggleSwitch(
-      this,
-      'quietMode',
-      this.platform.messages.quietMode,
-    );
-    this.PowerfulModeSwitch = new HeaterCoolerToggleSwitch(
-      this,
-      'powerfulMode',
-      this.platform.messages.powerfulMode,
-    );
-    this.VerticalSwing = new HeaterCoolerToggleSwitch(
-      this,
-      'verticalSwing',
-      this.platform.messages.verticalSwing,
-    );
-    this.HorizontalSwing = new HeaterCoolerToggleSwitch(
-      this,
-      'horizontalSwing',
-      this.platform.messages.horizontalSwing,
-    );
-
-    this.DryModeToggle = new HeaterCoolerToggleSwitch(
-      this,
-      'dryMode',
-      this.platform.messages.dryMode,
-    );
-    this.FanModeToggle = new HeaterCoolerToggleSwitch(
-      this,
-      'fanMode',
-      this.platform.messages.fanMode,
-    );
+    this.PowerSwitch = this.initSwitch('power', this.platform.messages.power);
+    this.QuietModeSwitch = this.initSwitch('light', this.platform.messages.light);
+    this.LightSwitch = this.initSwitch('quietMode', this.platform.messages.quietMode);
+    this.PowerfulModeSwitch = this.initSwitch('powerfulMode', this.platform.messages.powerfulMode);
+    this.VerticalSwing = this.initSwitch('verticalSwing', this.platform.messages.verticalSwing);
+    this.HorizontalSwing = this.initSwitch('horizontalSwing', this.platform.messages.horizontalSwing);
+    this.DryModeToggle = this.initSwitch('dryMode', this.platform.messages.dryMode);
+    this.FanModeToggle = this.initSwitch('fanMode', this.platform.messages.fanMode);
 
     this.HeaterCooler =
       this.accessory.getService(this.platform.messages.mode) ||
@@ -477,7 +443,7 @@ export class GreeAirConditioner {
   get powerfulMode() {
     return (
       this.status[commands.powerfulMode.code] ===
-        commands.powerfulMode.value.on &&
+      commands.powerfulMode.value.on &&
       this.status[commands.speed.code] === commands.speed.value.high
     );
   }
@@ -716,7 +682,7 @@ export class GreeAirConditioner {
     this.isPending = false;
 
     if (patch[commands.power.code] !== undefined) {
-      this.PowerSwitch.update();
+      this.PowerSwitch?.update();
       this.HeaterCooler.getCharacteristic(
         this.platform.Characteristic.Active,
       ).updateValue(this.deviceActive);
@@ -727,8 +693,8 @@ export class GreeAirConditioner {
       patch[commands.quietMode.code] !== undefined ||
       patch[commands.powerfulMode.code] !== undefined
     ) {
-      this.QuietModeSwitch.update();
-      this.PowerfulModeSwitch.update();
+      this.QuietModeSwitch?.update();
+      this.PowerfulModeSwitch?.update();
       this.HeaterCooler.getCharacteristic(
         this.platform.Characteristic.RotationSpeed,
       ).updateValue(this.speed);
@@ -737,14 +703,14 @@ export class GreeAirConditioner {
       this.HeaterCooler.getCharacteristic(
         this.platform.Characteristic.TargetHeaterCoolerState,
       ).updateValue(this.targetState);
-      this.DryModeToggle.update();
-      this.FanModeToggle.update();
+      this.DryModeToggle?.update();
+      this.FanModeToggle?.update();
     }
     if (patch[commands.swingHorizontal.code] !== undefined) {
-      this.HorizontalSwing.update();
+      this.HorizontalSwing?.update();
     }
     if (patch[commands.swingVertical.code] !== undefined) {
-      this.VerticalSwing.update();
+      this.VerticalSwing?.update();
     }
   }
 
@@ -825,6 +791,21 @@ export class GreeAirConditioner {
     }
 
     return cache;
+  }
+
+  initSwitch(name: SwitchName, displayName: string) {
+    this.platform.log.debug(`[${this.getDeviceLabel()}] initSwitch: %s`, name);
+    const switches = this.getConfig('switches');
+    this.platform.log.debug(`[${this.getDeviceLabel()}] switches: %s`, switches);
+    const shouldInit = switches.split(',').indexOf(name) > -1;
+    if (shouldInit) {
+      return new HeaterCoolerToggleSwitch(this, name, displayName);
+    } else {
+      const service = this.accessory.getService(displayName);
+      if (service) {
+        this.accessory.removeService(service);
+      }
+    }
   }
 }
 

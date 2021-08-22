@@ -2,15 +2,8 @@ import dgram from 'dgram';
 import crypto from './crypto';
 import { API, DynamicPlatformPlugin, Logger, PlatformAccessory, PlatformConfig, Service, Characteristic } from 'homebridge';
 
-import { PLATFORM_NAME, PLUGIN_NAME, DEFAULT_PLATFORM_CONFIG, UDP_SCAN_PORT, LocaleMessages } from './settings';
+import { PLATFORM_NAME, PLUGIN_NAME, DEFAULT_DEVICE_CONFIG, DEFAULT_PLATFORM_CONFIG, UDP_SCAN_PORT, LocaleMessages } from './settings';
 import { GreeAirConditioner } from './platformAccessory';
-
-export interface GreeAcDeviceConfig {
-  name?: string;
-  sensorOffset: number;
-  defaultSpeed: number;
-  disabled?: boolean;
-}
 
 function readLocaleMessages(locale) {
   try {
@@ -49,6 +42,10 @@ export class GreePlatform implements DynamicPlatformPlugin {
     this.config = {
       ...DEFAULT_PLATFORM_CONFIG,
       ...config,
+      defaultValue: {
+        ...DEFAULT_DEVICE_CONFIG,
+        ...(config.defaultValue || {}),
+      },
     };
     this.log.debug('Config: %j', this.config);
     this.scanCount = 0;
@@ -72,7 +69,7 @@ export class GreePlatform implements DynamicPlatformPlugin {
     // TODO: set SCAN_ADDRESS if
     const message = Buffer.from(JSON.stringify({ t: 'scan' }));
     this.socket.send(message, 0, message.length, UDP_SCAN_PORT, this.config.scanAddress, () => {
-      this.log.debug(`Broadcast '${message}' ${this.config.scanAddress}:${UDP_SCAN_PORT}` );
+      this.log.debug(`Broadcast '${message}' ${this.config.scanAddress}:${UDP_SCAN_PORT}`);
     });
   }
 
@@ -146,7 +143,7 @@ export class GreePlatform implements DynamicPlatformPlugin {
     }
 
     if (accessory) {
-    // mark devices as initialized.
+      // mark devices as initialized.
       accessory.context.device = deviceInfo;
       this.initializedDevices[accessory.UUID] = true;
       return new GreeAirConditioner(this, accessory, deviceConfig);
