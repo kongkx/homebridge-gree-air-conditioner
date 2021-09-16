@@ -70,6 +70,37 @@
             ],
             "required": true
           },
+          "defaultVerticalSwing": {
+            "title": "Default Vertical Swing Mode",
+            "type": "integer",
+            "default": 0,
+            "oneOf": [
+              { "title": "default", "enum": [0] },
+              { "title": "fixed highest", "enum": [2] },
+              { "title": "fixed higher", "enum": [3] },
+              { "title": "fixed middle", "enum": [4] },
+              { "title": "fixed lower", "enum": [5] },
+              { "title": "fixed lowest", "enum": [6] },
+              { "title": "swing lowest", "enum": [7] },
+              { "title": "swing lower", "enum": [8] },
+              { "title": "swing middle", "enum": [9] },
+              { "title": "swing higher", "enum": [10] },
+              { "title": "swing highest", "enum": [11] }
+            ]
+          },
+          "defaultHorizontalSwing": {
+            "title": "Default Horizontal Swing Mode",
+            "type": "integer",
+            "default": 0,
+            "oneOf": [
+              { "title": "default", "enum": [0] },
+              { "title": "left", "enum": [2] },
+              { "title": "centerLeft", "enum": [3] },
+              { "title": "center", "enum": [4] },
+              { "title": "centerRight", "enum": [5] },
+              { "title": "right", "enum": [6] }
+            ]
+          },
           "switches": {
             "title": "Switches",
             "type": "string",
@@ -120,6 +151,35 @@
                 { "title": "high", "enum": [5] }
               ],
               "required": true
+            },
+            "defaultVerticalSwing": {
+              "title": "Default Vertical Swing Mode",
+              "type": "integer",
+              "oneOf": [
+                { "title": "default", "enum": [0] },
+                { "title": "fixed highest", "enum": [2] },
+                { "title": "fixed higher", "enum": [3] },
+                { "title": "fixed middle", "enum": [4] },
+                { "title": "fixed lower", "enum": [5] },
+                { "title": "fixed lowest", "enum": [6] },
+                { "title": "swing lowest", "enum": [7] },
+                { "title": "swing lower", "enum": [8] },
+                { "title": "swing middle", "enum": [9] },
+                { "title": "swing higher", "enum": [10] },
+                { "title": "swing highest", "enum": [11] }
+              ]
+            },
+            "defaultHorizontalSwing": {
+              "title": "Default Horizontal Swing Mode",
+              "type": "integer",
+              "oneOf": [
+                { "title": "default", "enum": [0] },
+                { "title": "left", "enum": [2] },
+                { "title": "centerLeft", "enum": [3] },
+                { "title": "center", "enum": [4] },
+                { "title": "centerRight", "enum": [5] },
+                { "title": "right", "enum": [6] }
+              ]
             },
             "switches": {
               "title": "Switches",

@@ -38,6 +38,8 @@ export interface DeviceConfig {
   maximumTargetTemperature: number;
   sensorOffset: number;
   defaultSpeed: number;
+  defaultVerticalSwing?: number;
+  defaultHorizontalSwing?: number;
   statusUpdateInterval: number;
   switches: string; // commas separated string
   disabled?: boolean;
@@ -49,6 +51,8 @@ export const DEFAULT_DEVICE_CONFIG: DeviceConfig = {
   maximumTargetTemperature: 30,
   sensorOffset: 40,
   defaultSpeed: commands.speed.value.medium,
+  defaultVerticalSwing: commands.swingVertical.value.default,
+  defaultHorizontalSwing: commands.swingHorizontal.value.default,
   statusUpdateInterval: 20,
   switches: 'power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode',
 };

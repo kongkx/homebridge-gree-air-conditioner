@@ -484,7 +484,7 @@ export class GreeAirConditioner {
       });
     } else {
       this.sendCommand({
-        [commands.swingVertical.code]: commands.swingVertical.value.default,
+        [commands.swingVertical.code]: this.getConfig('defaultVerticalSwing'),
       });
     }
   }
@@ -506,7 +506,7 @@ export class GreeAirConditioner {
       });
     } else {
       this.sendCommand({
-        [commands.swingHorizontal.code]: commands.swingHorizontal.value.default,
+        [commands.swingHorizontal.code]: this.getConfig('defaultHorizontalSwing'),
       });
     }
   }

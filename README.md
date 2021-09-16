@@ -36,6 +36,7 @@ npm install homebridge-gree-air-conditioner -g
                 "maximumTargetTemperature": 30,
                 "sensorOffset": 40,
                 "defaultSpeed": 3,
+                "defaultVerticalSwing": 0,
                 "statusUpdateInterval": 3,
                 "switches": "power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode"
             },
@@ -79,6 +80,8 @@ From Gree+ App
 - [x] 左右扫风
 - [x] 上下扫风
 - [x] 指示灯控制
+- [x] 默认风板位置，当退出自动模式时，风板回到预设的模式
+
 ## 开发
 
 1. 安装 homebridge 以及 homebridge-config-ui-x
