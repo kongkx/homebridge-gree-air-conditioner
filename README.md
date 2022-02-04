@@ -1,5 +1,8 @@
 # Gree Air Conditioner Platform
 
+Support gree air conditioners.
+
+Should also work with all AC controlled by EWPE Smart APP.
 ## Installation
 
 ```
@@ -17,6 +20,19 @@ npm install homebridge-gree-air-conditioner -g
         }
     ]
 }
+```
+
+**Tips**
+
+How to get your scan address (broadcast address)?
+
+You may guess it based on your router address. If your router ip address is `192.168.1.1`,  the scan address is likely `192.168.1.255`
+
+```bash
+# Bash script
+ifconfig | grep 192
+# result
+# inet 192.168.1.102 netmask 0xffffff00 broadcast 192.168.1.255
 ```
 
 ## Configuration (optional)
@@ -53,7 +69,7 @@ npm install homebridge-gree-air-conditioner -g
 }
 ```
 
-**GET MAC ADDRESS**
+**GET MAC ADDRESS**
 
 From Home App Accessory
 
