@@ -26,7 +26,7 @@
         "description": "UDP socket server port to bind"
       },
       "scanAddress": {
-        "title": "Scan Address",
+        "title": "Scan Address, not target device address",
         "type": "string",
         "format": "ipv4",
         "default": "192.168.1.255"

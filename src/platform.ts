@@ -66,7 +66,6 @@ export class GreePlatform implements DynamicPlatformPlugin {
   }
 
   broadcastScan() {
-    // TODO: set SCAN_ADDRESS if
     const message = Buffer.from(JSON.stringify({ t: 'scan' }));
     this.socket.send(message, 0, message.length, UDP_SCAN_PORT, this.config.scanAddress, () => {
       this.log.debug(`Broadcast '${message}' ${this.config.scanAddress}:${UDP_SCAN_PORT}`);
@@ -77,7 +76,9 @@ export class GreePlatform implements DynamicPlatformPlugin {
     this.log.info('Loading accessory from cache:', accessory.displayName, accessory.context.device);
 
     // add the restored accessory to the accessories cache so we can track if it has already been registered
-    this.devices[accessory.context.device.mac] = accessory;
+    if (accessory.context.device?.mac) {
+      this.devices[accessory.context.device.mac] = accessory;
+    }
   }
 
   discoverDevices() {
