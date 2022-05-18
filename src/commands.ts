@@ -108,6 +108,10 @@ const commands = {
   },
   sleepMode: {
     code: 'SwhSlp',
+    value: {
+      off: 0,
+      on: 1,
+    },
   },
   time: {
     code: 'time',

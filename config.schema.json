@@ -104,7 +104,7 @@
           "switches": {
             "title": "Switches",
             "type": "string",
-            "description": "Switches to enable.",
+            "description": "Switches to enable. options: power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode,sleepMode",
             "placeholder": "power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode"
           }
         }
@@ -184,8 +184,8 @@
             "switches": {
               "title": "Switches",
               "type": "string",
-              "description": "Switches to enable. commas separated string. options: power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode",
-              "placeholder": "power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode"
+              "description": "Switches to enable. commas separated string. options: power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode,sleepMode",
+              "placeholder": "power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode,sleepMode"
             }
           }
         }

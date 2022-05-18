@@ -26,6 +26,7 @@ export class GreeAirConditioner {
   private HorizontalSwing?: HeaterCoolerToggleSwitch;
   private DryModeToggle?: HeaterCoolerToggleSwitch;
   private FanModeToggle?: HeaterCoolerToggleSwitch;
+  private SleepModeToggle?: HeaterCoolerToggleSwitch;
 
   private key: string | undefined;
   public socket: Socket;
@@ -78,6 +79,7 @@ export class GreeAirConditioner {
     this.HorizontalSwing = this.initSwitch('horizontalSwing', this.platform.messages.horizontalSwing);
     this.DryModeToggle = this.initSwitch('dryMode', this.platform.messages.dryMode);
     this.FanModeToggle = this.initSwitch('fanMode', this.platform.messages.fanMode);
+    this.SleepModeToggle = this.initSwitch('sleepMode', this.platform.messages.sleepMode);
 
     this.HeaterCooler =
       this.accessory.getService(this.platform.messages.mode) ||
@@ -467,6 +469,25 @@ export class GreeAirConditioner {
     }
   }
 
+  get sleepMode() {
+    return this.status[commands.sleepMode.code] === commands.sleepMode.value.on;
+  }
+
+  set sleepMode(value) {
+    if (value === this.sleepMode) {
+      return;
+    }
+    if (value) {
+      this.sendCommand({
+        [commands.sleepMode.code]: commands.sleepMode.value.on,
+      });
+    } else {
+      this.sendCommand({
+        [commands.sleepMode.code]: commands.sleepMode.value.off,
+      });
+    }
+  }
+
   get verticalSwing() {
     return (
       this.status[commands.swingVertical.code] ===
@@ -711,6 +732,9 @@ export class GreeAirConditioner {
     }
     if (patch[commands.swingVertical.code] !== undefined) {
       this.VerticalSwing?.update();
+    }
+    if (patch[commands.sleepMode.code] !== undefined) {
+      this.SleepModeToggle?.update();
     }
   }
 

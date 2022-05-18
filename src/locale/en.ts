@@ -11,6 +11,7 @@ const messages: LocaleMessages = {
   fanMode: 'Fan Mode',
   dryMode: 'Dry Mode',
   fanSpeed: 'Fan Speed',
+  sleepMode: 'Sleep Mode',
 };
 
 export default messages;

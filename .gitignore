@@ -121,3 +121,4 @@ dist
 
 homebridge/*
 !homebridge/config.json.example
+data.js

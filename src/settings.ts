@@ -13,7 +13,8 @@ export type SwitchName =
   'powerfulMode' |
   'light' |
   'dryMode' |
-  'fanMode';
+  'fanMode' |
+  'sleepMode';
 
 /**
  * This must match the name of your plugin as defined the package.json
@@ -31,6 +32,7 @@ export interface LocaleMessages {
   dryMode: string;
   fanMode: string;
   fanSpeed: string;
+  sleepMode: string;
 }
 export interface DeviceConfig {
   name?: string;
@@ -54,7 +56,7 @@ export const DEFAULT_DEVICE_CONFIG: DeviceConfig = {
   defaultVerticalSwing: commands.swingVertical.value.default,
   defaultHorizontalSwing: commands.swingHorizontal.value.default,
   statusUpdateInterval: 20,
-  switches: 'power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode',
+  switches: 'power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode,sleepMode',
 };
 
 export const DEFAULT_PLATFORM_CONFIG = {
