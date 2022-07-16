@@ -97,6 +97,7 @@ export class GreePlatform implements DynamicPlatformPlugin {
   }
 
   handleMessage = (msg, rinfo) => {
+    this.log.debug('handleMessage', msg.toString());
     try {
       const message = JSON.parse(msg.toString());
       if (message.i !== 1 || message.t !== 'pack') {
