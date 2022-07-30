@@ -103,7 +103,6 @@ export class GreePlatform implements DynamicPlatformPlugin {
       if (message.i !== 1 || message.t !== 'pack') {
         return;
       }
-      this.log.debug('platform handleMessage: %j', message);
       const pack = crypto.decrypt(message.pack);
       if (message.t === 'pack' && pack.t === 'dev') {
         this.registerDevice({

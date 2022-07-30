@@ -72,8 +72,8 @@ export class GreeAirConditioner {
       );
 
     this.PowerSwitch = this.initSwitch('power', this.platform.messages.power);
-    this.QuietModeSwitch = this.initSwitch('light', this.platform.messages.light);
-    this.LightSwitch = this.initSwitch('quietMode', this.platform.messages.quietMode);
+    this.QuietModeSwitch = this.initSwitch('quietMode', this.platform.messages.quietMode);
+    this.LightSwitch = this.initSwitch('light', this.platform.messages.light);
     this.PowerfulModeSwitch = this.initSwitch('powerfulMode', this.platform.messages.powerfulMode);
     this.VerticalSwing = this.initSwitch('verticalSwing', this.platform.messages.verticalSwing);
     this.HorizontalSwing = this.initSwitch('horizontalSwing', this.platform.messages.horizontalSwing);
@@ -133,7 +133,7 @@ export class GreeAirConditioner {
       .on('get', this.getCharacteristic.bind(this, 'units'))
       .on('set', this.setCharacteristic.bind(this, 'units'));
 
-    this.Fan = this.HeaterCooler =
+    this.Fan =
       this.accessory.getService(this.platform.messages.fanSpeed) ||
       this.accessory.addService(
         this.platform.Service.Fanv2,
@@ -716,7 +716,7 @@ export class GreeAirConditioner {
     ) {
       this.QuietModeSwitch?.update();
       this.PowerfulModeSwitch?.update();
-      this.HeaterCooler.getCharacteristic(
+      this.Fan.getCharacteristic(
         this.platform.Characteristic.RotationSpeed,
       ).updateValue(this.speed);
     }
