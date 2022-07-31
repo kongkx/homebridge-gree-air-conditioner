@@ -131,3 +131,14 @@ const MODE_4 = {
   Quiet: 0,
   Tur: 0,
 };
+
+const FS_L2 = {'Pow':1, 'Mod':1, 'SetTem':27, 'TemSen':69, 'TemUn':0, 'TemRec':0, 'WdSpd':2, 'SwingLfRig':1, 'SwUpDn':1, 'Blo':0, 'Lig':0, 'Quiet':0, 'Tur':0, 'HeatCoolType':0, 'SvSt':0, 'SwhSlp':0, 'time':'2022-07-31 09:08:29'};
+const FS_L3 = {'Pow':1, 'Mod':1, 'SetTem':27, 'TemSen':69, 'TemUn':0, 'TemRec':0, 'WdSpd':3, 'SwingLfRig':1, 'SwUpDn':1, 'Blo':0, 'Lig':0, 'Quiet':0, 'Tur':0, 'HeatCoolType':0, 'SvSt':0, 'SwhSlp':0, 'time':'2022-07-31 09:09:29'};
+const FS_L4 = {'Pow':1, 'Mod':1, 'SetTem':27, 'TemSen':69, 'TemUn':0, 'TemRec':0, 'WdSpd':4, 'SwingLfRig':1, 'SwUpDn':1, 'Blo':0, 'Lig':0, 'Quiet':0, 'Tur':0, 'HeatCoolType':0, 'SvSt':0, 'SwhSlp':0, 'time':'2022-07-31 09:10:09'};
+const FS_L5 = {'Pow':1, 'Mod':1, 'SetTem':27, 'TemSen':69, 'TemUn':0, 'TemRec':0, 'WdSpd':5, 'SwingLfRig':1, 'SwUpDn':1, 'Blo':0, 'Lig':0, 'Quiet':0, 'Tur':0, 'HeatCoolType':0, 'SvSt':0, 'SwhSlp':0, 'time':'2022-07-31 09:10:39'};
+// powerful
+const FS_PO = {'Pow':1, 'Mod':1, 'SetTem':27, 'TemSen':69, 'TemUn':0, 'TemRec':0, 'WdSpd':5, 'SwingLfRig':1, 'SwUpDn':1, 'Blo':0, 'Lig':0, 'Quiet':0, 'Tur':1, 'HeatCoolType':0, 'SvSt':0, 'SwhSlp':0, 'time':'2022-07-31 09:11:09'};
+// auto
+const FS_AU = {'Pow':1, 'Mod':1, 'SetTem':27, 'TemSen':69, 'TemUn':0, 'TemRec':0, 'WdSpd':0, 'SwingLfRig':1, 'SwUpDn':1, 'Blo':0, 'Lig':0, 'Quiet':0, 'Tur':0, 'HeatCoolType':0, 'SvSt':0, 'SwhSlp':0, 'time':'2022-07-31 09:11:29'};
+// quiet
+const FS_QT = {'Pow':1, 'Mod':1, 'SetTem':27, 'TemSen':69, 'TemUn':0, 'TemRec':0, 'WdSpd':1, 'SwingLfRig':1, 'SwUpDn':1, 'Blo':0, 'Lig':0, 'Quiet':2, 'Tur':0, 'HeatCoolType':0, 'SvSt':0, 'SwhSlp':0, 'time':'2022-07-31 09:11:49'};

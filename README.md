@@ -1,15 +1,22 @@
-# Gree Air Conditioner Platform
+# 格力 Gree Air Conditioner Platform
 
-Support gree air conditioners.
+支持
 
-Should also work with all AC controlled by EWPE Smart APP.
-## Installation
+- 格力空调
+- EWPE 可控制的空调
+
+Supports
+
+- gree air conditioners.
+- all AC controlled by EWPE Smart APP.
+
+## 安装 [Installation]
 
 ```
 npm install homebridge-gree-air-conditioner -g
 ```
 
-## Configuration (mininal)
+## 配置（简单）[Configuration (mininal)]
 
 ```
 {
@@ -22,20 +29,35 @@ npm install homebridge-gree-air-conditioner -g
 }
 ```
 
+**提示**
+
+如何获取合适的扫描（广播）地址。
+
+1. 猜，如果路由 ip 是 `192.168.1.1`， 那么扫描地址很可能是 `192.168.1.225`
+2. 或 在终端中执行脚本查看，如下
+
+   ```bash
+   ifconfig | grep broadcast
+   # result
+   # inet 192.168.1.102 netmask 0xffffff00 broadcast 192.168.1.255
+   ```
+
 **Tips**
 
 How to get your scan address (broadcast address)?
 
-You may guess it based on your router address. If your router ip address is `192.168.1.1`,  the scan address is likely `192.168.1.255`
+1.  You may guess it based on your router address. If your router ip address is `192.168.1.1`, the scan address is likely `192.168.1.255`
+2.  Or，run the code below in your terminal:
 
-```bash
-# Bash script
-ifconfig | grep 192
-# result
-# inet 192.168.1.102 netmask 0xffffff00 broadcast 192.168.1.255
-```
+    ```bash
+    ifconfig | grep broadcast
+    # result
+    # inet 192.168.1.102 netmask 0xffffff00 broadcast 192.168.1.255
+    ```
 
-## Configuration (optional)
+## 配置（自定义） Configuration (optional)
+
+可使用
 
 ```
 {
@@ -57,7 +79,7 @@ ifconfig | grep 192
                 "switches": "power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode"
             },
             "devices": [
-                { 
+                {
                     "mac": "c8f742xxxxxx",
                     "sensorOffset": 40,
                     "defaultSpeed": 3,
@@ -69,13 +91,21 @@ ifconfig | grep 192
 }
 ```
 
-**GET MAC ADDRESS**
+原遥控器功能在插件中的实现情况，可查看文档： [功能文档](./feature-mapping.md)
 
-From Home App Accessory
+More info about what features have been implemented comparing to remote control, Ref: [功能文档](./feature-mapping.md)
+
+**获取 MAC 地址 [GET MAC ADDRESS]**
+
+A. 如果当前插件已经启用，并已成功添加设备。可在 家庭 应用中查看。
+
+A. From Home App Accessory, if this plugin has enabled and successfuly added your device.
 
 ![mac_address](./device_mac.jpeg)
 
-From Gree+ App
+B. 从 Gree+ 应用中获取
+
+B. From Gree+ App
 
 ![mac_address2](./device_mac2.jpeg)
 
@@ -84,13 +114,13 @@ From Gree+ App
 - [x] 设备独立设置
 - [x] 缓存模式状态，在切换模式时 像遥控器那样 保留原模式下的设置
 - [x] 本地化语言，支持简体中文以及英文，方便通过 Siri 控制模式开关。 如 ”Siri， 打开静音模式“
-- [x] 控制功能开关的启动。示例：`power,light` 仅启用电源，灯光控制开关，其他强劲模式、静音模式开关均不启用。
+- [x] 可配置功能开关的启用。示例：`power,light` 仅启用电源，灯光控制开关，其他强劲模式、静音模式等开关均不启用。
 
 - [x] 电源控制
 - [x] 温度调节
 - [x] 模式调节 （不支持 送风，除湿）
 - [x] 送风模式、除湿模式开关
-- [ ] 风速调节
+- [x] 风速调节
 - [x] 静音模式
 - [x] 强劲模式
 - [x] 左右扫风
@@ -110,7 +140,7 @@ npm install -g homebridge homebridge-config-ui-x
 2. 准备配置文件
 
 ```
-cp homebridge/config.json.example homebridge/config.json    
+cp homebridge/config.json.example homebridge/config.json
 ```
 
 2. 启动开发服务
@@ -118,114 +148,6 @@ cp homebridge/config.json.example homebridge/config.json
 ```
 npm run watch
 ```
-
-## 空调遥控器按键功能整理
-
-### 开关
-
-控制电源开关
-
-| label | code         |
-| ----- | ------------ |
-| 开    | `{ Pow: 1 }` |
-| 关    | `{ Pow: 0 }` |
-
-### 模式
-
-模式切换按钮，会保存有温度设置、风速等数据
-
-| label | code |
-| ----- | ---- |
-| 自动 | `{ Mod: 0, SetTem: 25, WdSpd: 3, Tur: 0, Quiet: 0 }` |
-| 制冷 | `{ Mod: 1, SetTem: 28, WpSpd: 0, Tur: 0, Quiet: 0 }` |
-| 除湿 | `{ Mod: 2, SetTem: 25, WpSpd: 3, Tur: 0, Quiet: 0 }` |
-| 送风 | `{ Mod: 3, SetTem: 26, WpSpd: 3, Tur: 0, Quiet: 0 }` |
-| 制热 | `{ Mod: 4, SetTem: 27, WpSpd: 3, Tur: 0, Quiet: 0 }` |
-
-### 风速
-
-| label | code                             |
-| ----- | -------------------------------- |
-| 自动  | `{ Quiet: 0, Tur: 0, WdSpd: 0 }` |
-| 静音  | `{ Quiet: 2, Tur: 0, WdSpd: 1 }` |
-| 1 级  | `{ Quiet: 0, Tur: 0, WdSpd: 1 }` |
-| 2 级  | `{ Quiet: 0, Tur: 0, WdSpd: 2 }` |
-| 3 级  | `{ Quiet: 0, Tur: 0, WdSpd: 3 }` |
-| 4 级  | `{ Quiet: 0, Tur: 0, WdSpd: 4 }` |
-| 5 级  | `{ Quiet: 0, Tur: 0, WdSpd: 5 }` |
-| 强劲  | `{ Quiet: 0, Tur: 1, WdSpd: 5 }` |
-
-
-- 自动模式下，风速在 “自动”，“1 级”，“2 级”，“3 级”，“4 级”，“5 级” 之间循环
-- 制冷模式下，风速在 “自动”，“静音”，“1 级”，“2 级”，“3 级”，“4 级”，“5 级”，“强劲” 之间循环
-- 除湿模式下，风速只能停留在“1 级”
-- 送风模式下，风速在 “自动”，“1 级”，“2 级”，“3 级”，“4 级”，“5 级” 之间循环
-- 制热模式下，风速在 “自动”，“静音”，“1 级”，“2 级”，“3 级”，“4 级”，“5 级”，“强劲” 之间循环
-
-### 凉感
-
-凉感对应的 ColCode 不明
-
-### 上下扫风
-
-| label | code            |
-| ----- | --------------- |
-| 开    | `{ SwUpDn: 1 }` |
-| 关    | `{ SwUpDn: 0 }` |
-
-### 左右扫风
-
-| label | code                |
-| ----- | ------------------- |
-| 开    | `{ SwingLfRig: 1 }` |
-| 关    | `{ SwingLfRig: 0 }` |
-
-### 定向导风
-
-| label | code            | 遥控 | app |
-| ----- | --------------- | ---- | --- |
-| 上    | `{ SwUpDn: 2 }` | x    | x   |
-| 中上  | `{ SwUpDn: 3 }` | o    | x   |
-| 中    | `{ SwUpDn: 4 }` | x    | x   |
-| 中下  | `{ SwUpDn: 5 }` | o    | x   |
-| 下    | `{ SwUpDn: 6 }` | x    | x   |
-
-### 制冷、制热
-
-模式切换按钮，分别与模式中的 “制冷”， “制热” 对应
-[参考](https://github.com/tomikaa87/gree-remote#scheduling)
-
-### 定时
-
-定时开关机，与 APP 上的“预约”为同一个功能
-### 睡眠
-
-睡眠模式的切换
-
-| label | code                |
-| ----- | ------------------- |
-| 开    | `{ SwhSlp: 1 }` |
-| 关    | `{ SwhSlp: 0 }` |
-
-睡眠模式下的四个档位，具体对应的 ColCode 不明
-
-- 睡眠1 - 舒睡模式
-- 睡眠2 - 舒醒模式
-- 睡眠3 - 自定义模式
-- 睡眠4 - 午睡模式
-
-### 灯光
-
-面板灯光显示
-
-| label | code                |
-| ----- | ------------------- |
-| 开    | `{ Lig: 1 }` |
-| 关    | `{ Lig: 0 }` |
-### 辅热
-
-制热模式下的功能。
-
 
 ## Refs & Credits
 
