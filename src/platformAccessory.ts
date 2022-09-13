@@ -59,7 +59,7 @@ export class GreeAirConditioner {
       )
       .setCharacteristic(
         this.platform.Characteristic.Model,
-        this.accessory.context.device.name,
+        this.accessory.context.device.name || this.accessory.context.device.model || 'Gree',
       )
       .setCharacteristic(this.platform.Characteristic.Name, this.getName())
       .setCharacteristic(
