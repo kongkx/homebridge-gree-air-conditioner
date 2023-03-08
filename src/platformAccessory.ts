@@ -16,7 +16,7 @@ import { HeaterCoolerToggleSwitch } from './HeaterCoolerToggleSwitch';
 export class GreeAirConditioner {
   // services
   private HeaterCooler: Service;
-  private Fan: Service;
+  private Fan?: Service;
 
   private PowerSwitch?: HeaterCoolerToggleSwitch;
   private QuietModeSwitch?: HeaterCoolerToggleSwitch;
@@ -133,17 +133,7 @@ export class GreeAirConditioner {
       .on('get', this.getCharacteristic.bind(this, 'units'))
       .on('set', this.setCharacteristic.bind(this, 'units'));
 
-    this.Fan =
-      this.accessory.getService(this.platform.messages.fanSpeed) ||
-      this.accessory.addService(
-        this.platform.Service.Fanv2,
-        this.platform.messages.fanSpeed,
-      );
-    this.Fan.getCharacteristic(this.platform.Characteristic.Active).on(
-      'get',
-      this.getCharacteristic.bind(this, 'power'),
-    );
-    this.Fan.getCharacteristic(this.platform.Characteristic.RotationSpeed)
+    this.HeaterCooler.getCharacteristic(this.platform.Characteristic.RotationSpeed)
       .setProps({
         minValue: 0,
         maxValue: 5,
@@ -151,6 +141,38 @@ export class GreeAirConditioner {
       })
       .on('get', this.getCharacteristic.bind(this, 'speed'))
       .on('set', this.setCharacteristic.bind(this, 'speed'));
+
+    this.HeaterCooler.getCharacteristic(this.platform.Characteristic.SwingMode)
+      .on('get', this.getCharacteristic.bind(this, 'verticalSwing'))
+      .on('set', this.setCharacteristic.bind(this, 'verticalSwing'));
+
+    const hasFanMode = this.getConfig('hasFanMode');
+    if (hasFanMode) {
+      this.Fan =
+        this.accessory.getService(this.platform.messages.fanSpeed) ||
+        this.accessory.addService(
+          this.platform.Service.Fanv2,
+          this.platform.messages.fanSpeed,
+        );
+      this.Fan.getCharacteristic(this.platform.Characteristic.Active).on(
+        'get',
+        this.getCharacteristic.bind(this, 'fanMode'),
+      ).on('set', this.setCharacteristic.bind(this, 'fanMode'));
+      this.Fan.getCharacteristic(this.platform.Characteristic.RotationSpeed)
+        .setProps({
+          minValue: 0,
+          maxValue: 5,
+          minStep: 1,
+        })
+        .on('get', this.getCharacteristic.bind(this, 'speed'))
+        .on('set', this.setCharacteristic.bind(this, 'speed'));
+    } else {
+      // clean up
+      const fanService = this.accessory.getService(this.platform.messages.fanSpeed);
+      if (fanService) {
+        this.accessory.removeService(fanService);
+      }
+    }
   }
 
   getCharacteristic(key, callback) {
@@ -626,7 +648,7 @@ export class GreeAirConditioner {
         this.getAddress(),
       );
     } catch (err) {
-      this.platform.log.error(err);
+      this.platform.log.error((err as Error).message);
     }
   }
 
@@ -716,7 +738,10 @@ export class GreeAirConditioner {
     ) {
       this.QuietModeSwitch?.update();
       this.PowerfulModeSwitch?.update();
-      this.Fan.getCharacteristic(
+      this.HeaterCooler.getCharacteristic(
+        this.platform.Characteristic.RotationSpeed,
+      ).updateValue(this.speed);
+      this.Fan?.getCharacteristic(
         this.platform.Characteristic.RotationSpeed,
       ).updateValue(this.speed);
     }
@@ -820,8 +845,14 @@ export class GreeAirConditioner {
   initSwitch(name: SwitchName, displayName: string) {
     this.platform.log.debug(`[${this.getDeviceLabel()}] initSwitch: %s`, name);
     const switches = this.getConfig('switches');
+    const hasFanMode = this.getConfig('hasFanMode');
+    const hasDryMode = this.getConfig('hasDryMode');
     this.platform.log.debug(`[${this.getDeviceLabel()}] switches: %s`, switches);
-    const shouldInit = switches.split(',').indexOf(name) > -1;
+    const shouldInit = (
+      switches.split(',').indexOf(name) > -1 &&
+      (hasFanMode || name !== 'fanMode') &&
+      (hasDryMode || name !== 'dryMode')
+    );
     if (shouldInit) {
       return new HeaterCoolerToggleSwitch(this, name, displayName);
     } else {

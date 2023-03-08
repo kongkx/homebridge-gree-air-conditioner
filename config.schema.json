@@ -16,17 +16,17 @@
         "default": "zh-CN",
         "oneOf": [
           { "title": "简体中文", "enum": ["zh-CN"] },
-          { "title": "English", "enum": ["en"] }
+          { "title": "English", "enum": ["en"] },
+          { "title": "繁体中文", "enum": ["zh-HK"] }
         ]
       },
       "port": {
         "title": "Port",
         "type": "integer",
-        "default": 7002,
-        "description": "UDP socket server port to bind"
+        "default": 7002
       },
       "scanAddress": {
-        "title": "Scan Address, not target device address",
+        "title": "Scan Address",
         "type": "string",
         "format": "ipv4",
         "default": "192.168.1.255"
@@ -56,6 +56,16 @@
               { "title": "40", "enum": [40] },
               { "title": "0", "enum": [0] }
             ]
+          },
+          "hasFanMode": {
+            "title": "Has fan mode",
+            "type": "boolean",
+            "default": true
+          },
+          "hasDryMode": {
+            "title": "Has dry mode",
+            "type": "boolean",
+            "default": true
           },
           "defaultSpeed": {
             "title": "Default Fan Speed",
@@ -104,7 +114,7 @@
           "switches": {
             "title": "Switches",
             "type": "string",
-            "description": "Switches to enable. options: power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode,sleepMode",
+            "description": "options: power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode,sleepMode",
             "placeholder": "power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode"
           }
         }
@@ -116,6 +126,10 @@
           "title": "Device",
           "type": "object",
           "properties": {
+            "disabled": {
+              "title": "Disabled",
+              "type": "boolean"
+            },
             "mac": {
               "title": "Mac Address (Serial Number)",
               "type": "string",
@@ -125,9 +139,31 @@
               "title": "Custom Device Name",
               "type": "string"
             },
-            "disabled": {
-              "title": "Disabled",
-              "type": "boolean"
+            "statusUpdateInterval": {
+              "title": "Status Update Interval (Second)",
+              "type": "integer",
+              "default": 10,
+              "minimum": 1,
+              "maximum": 600,
+              "condition": {
+                "functionBody": "return model.devices[arrayIndices].disabled !== true;"
+              }
+            },
+            "hasFanMode": {
+              "title": "Has fan mode",
+              "type": "boolean",
+              "default": true,
+              "condition": {
+                "functionBody": "return model.devices[arrayIndices].disabled !== true;"
+              }
+            },
+            "hasDryMode": {
+              "title": "Has dry mode",
+              "type": "boolean",
+              "default": true,
+              "condition": {
+                "functionBody": "return model.devices[arrayIndices].disabled !== true;"
+              }
             },
             "sensorOffset": {
               "title": "Temperature Offset",
@@ -137,7 +173,9 @@
                 { "title": "40", "enum": [40] },
                 { "title": "0", "enum": [0] }
               ],
-              "required": true
+              "condition": {
+                "functionBody": "return model.devices[arrayIndices].disabled !== true;"
+              }
             },
             "defaultSpeed": {
               "title": "Default Fan Speed",
@@ -150,7 +188,9 @@
                 { "title": "medium-high", "enum": [4] },
                 { "title": "high", "enum": [5] }
               ],
-              "required": true
+              "condition": {
+                "functionBody": "return model.devices[arrayIndices].disabled !== true;"
+              }
             },
             "defaultVerticalSwing": {
               "title": "Default Vertical Swing Mode",
@@ -167,7 +207,10 @@
                 { "title": "swing middle", "enum": [9] },
                 { "title": "swing higher", "enum": [10] },
                 { "title": "swing highest", "enum": [11] }
-              ]
+              ],
+              "condition": {
+                "functionBody": "return model.devices[arrayIndices].disabled !== true;"
+              }
             },
             "defaultHorizontalSwing": {
               "title": "Default Horizontal Swing Mode",
@@ -179,17 +222,138 @@
                 { "title": "center", "enum": [4] },
                 { "title": "centerRight", "enum": [5] },
                 { "title": "right", "enum": [6] }
-              ]
+              ],
+              "condition": {
+                "functionBody": "return model.devices[arrayIndices].disabled !== true;"
+              }
             },
             "switches": {
               "title": "Switches",
               "type": "string",
               "description": "Switches to enable. commas separated string. options: power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode,sleepMode",
-              "placeholder": "power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode,sleepMode"
+              "placeholder": "power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode,sleepMode",
+              "condition": {
+                "functionBody": "return model.devices[arrayIndices].disabled !== true;"
+              }
             }
           }
         }
       }
     }
-  }
+  },
+  "layout": [
+    {
+      "type": "flex",
+      "flex-direction": "row",
+      "items": [
+        { "key": "name", "flex-basis": "50%" },
+        { "key": "language", "flex-basis": "50%" }
+      ]
+    },
+    {
+      "type": "flex",
+      "flex-direction": "row",
+      "items": [
+        {
+          "key": "port",
+          "flex-basis": "30%",
+          "description": "to receive response"
+        },
+        {
+          "key": "scanAddress",
+          "flex-basis": "50%",
+          "description": "related to your network env"
+        },
+        {
+          "key": "scanCount",
+          "flex-basis": "50%",
+          "description": "for initial device discovery"
+        }
+      ]
+    },
+
+    {
+      "type": "fieldset",
+      "expandable": true,
+      "expanded": true,
+      "title": "Default Value",
+      "items": [
+        {
+          "type": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "type": "div",
+              "flex-basis": "50%",
+              "items": [
+                "defaultValue.defaultSpeed",
+                "defaultValue.defaultVerticalSwing",
+                "defaultValue.defaultHorizontalSwing"
+              ]
+            },
+            {
+              "type": "div",
+              "flex-basis": "50%",
+              "items": [
+                "defaultValue.sensorOffset",
+                "defaultValue.hasFanMode",
+                "defaultValue.hasDryMode",
+                "defaultValue.statusUpdateInterval"
+              ]
+            }
+          ]
+        },
+        "defaultValue.switches"
+      ]
+    },
+    {
+      "type": "fieldset",
+      "title": "Devices",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "notitle": true,
+          "key": "devices",
+          "type": "array",
+          "items": [
+            {
+              "type": "div",
+              "items": [
+                "devices[].disabled",
+                {
+                  "type": "flex",
+                  "flex-direction": "row",
+                  "items": [
+                    {
+                      "type": "div",
+                      "flex-basis": "50%",
+                      "items": [
+                        "devices[].mac",
+                        "devices[].defaultSpeed",
+                        "devices[].defaultVerticalSwing",
+                        "devices[].defaultHorizontalSwing"
+                      ]
+                    },
+                    {
+                      "type": "div",
+                      "flex-basis": "50%",
+                      "items": [
+                        "devices[].name",
+                        "devices[].sensorOffset",
+                        "devices[].hasFanMode",
+                        "devices[].hasDryMode",
+                        "devices[].statusUpdateInterval"
+                      ]
+                    }
+                  ]
+                },
+                "devices[].switches"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

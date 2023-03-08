@@ -36,6 +36,8 @@ export interface LocaleMessages {
 }
 export interface DeviceConfig {
   name?: string;
+  hasFanMode?: boolean;
+  hasDryMode?: boolean;
   minimumTargetTemperature: number;
   maximumTargetTemperature: number;
   sensorOffset: number;
@@ -49,6 +51,7 @@ export interface DeviceConfig {
 
 
 export const DEFAULT_DEVICE_CONFIG: DeviceConfig = {
+  hasFanMode: true,
   minimumTargetTemperature: 16,
   maximumTargetTemperature: 30,
   sensorOffset: 40,
