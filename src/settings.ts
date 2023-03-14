@@ -52,6 +52,7 @@ export interface DeviceConfig {
 
 export const DEFAULT_DEVICE_CONFIG: DeviceConfig = {
   hasFanMode: true,
+  hasDryMode: true,
   minimumTargetTemperature: 16,
   maximumTargetTemperature: 30,
   sensorOffset: 40,

@@ -805,7 +805,7 @@ export class GreeAirConditioner {
     return (
       this.deviceConfig?.[key] ??
       this.platform.config.defaultValue?.[key] ??
-      DEFAULT_PLATFORM_CONFIG[key]
+      DEFAULT_PLATFORM_CONFIG.defaultValue[key]
     );
   }
 

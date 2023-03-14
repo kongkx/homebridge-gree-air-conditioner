@@ -112,6 +112,7 @@ export class GreePlatform implements DynamicPlatformPlugin {
         });
       }
     } catch (err) {
+      this.log.info('message failed to handle', msg.toString());
       this.log.error('handleMessage Error', err);
     }
   };
