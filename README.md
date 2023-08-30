@@ -67,7 +67,7 @@ How to get your scan address (broadcast address)?
             "name": "My Gree",
             "port": 7002,
             "scanCount": 10,
-            "scanTimout": 3000,
+            "scanTimeout": 3000,
             "scanAddress": "192.168.1.255",
             "defaultValue": {
                 "minimumTargetTemperature": 16,

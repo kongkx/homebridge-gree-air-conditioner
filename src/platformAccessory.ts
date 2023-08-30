@@ -4,8 +4,9 @@ import crypto from './crypto';
 import commands from './commands';
 
 import { GreePlatform } from './platform';
-import { DEFAULT_PLATFORM_CONFIG, DeviceConfig, SwitchName } from './settings';
+import { DEFAULT_PLATFORM_CONFIG } from './settings';
 import { HeaterCoolerToggleSwitch } from './HeaterCoolerToggleSwitch';
+import {DeviceConfig, SwitchName } from './types';
 
 /**
  * Platform Accessory
@@ -39,7 +40,7 @@ export class GreeAirConditioner {
   constructor(
     public readonly platform: GreePlatform,
     public readonly accessory: PlatformAccessory,
-    public readonly deviceConfig: DeviceConfig,
+    public readonly deviceConfig?: DeviceConfig,
   ) {
     this.socket = platform.socket;
     this.binded = false;
@@ -714,10 +715,18 @@ export class GreeAirConditioner {
   }
 
   updateStatus(patch) {
-    this.platform.log.info(
-      `[${this.getDeviceLabel()}] Update Status: %j`,
-      patch,
-    );
+    if (this.platform.config.logStatus) {
+      this.platform.log.info(
+        `[${this.getDeviceLabel()}] Update Status: %j`,
+        patch,
+      );
+    } else {
+      this.platform.log.debug(
+        `[${this.getDeviceLabel()}] Update Status: %j`,
+        patch,
+      );
+    }
+
     this.status = {
       ...this.status,
       ...patch,

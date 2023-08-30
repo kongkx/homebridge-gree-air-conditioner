@@ -1,4 +1,4 @@
-import { LocaleMessages } from '../settings';
+import { LocaleMessages } from '../types';
 
 const messages: LocaleMessages = {
   power: '电源',

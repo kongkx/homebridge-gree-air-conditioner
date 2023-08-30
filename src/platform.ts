@@ -2,8 +2,9 @@ import dgram from 'dgram';
 import crypto from './crypto';
 import { API, DynamicPlatformPlugin, Logger, PlatformAccessory, PlatformConfig, Service, Characteristic } from 'homebridge';
 
-import { PLATFORM_NAME, PLUGIN_NAME, DEFAULT_DEVICE_CONFIG, DEFAULT_PLATFORM_CONFIG, UDP_SCAN_PORT, LocaleMessages } from './settings';
+import { PLATFORM_NAME, PLUGIN_NAME, DEFAULT_DEVICE_CONFIG, DEFAULT_PLATFORM_CONFIG, UDP_SCAN_PORT } from './settings';
 import { GreeAirConditioner } from './platformAccessory';
+import { GreePlatformConfig, LocaleMessages } from './types';
 
 function readLocaleMessages(locale) {
   try {
@@ -30,10 +31,11 @@ export class GreePlatform implements DynamicPlatformPlugin {
   scanCount: number;
   timer: NodeJS.Timeout | undefined;
   messages: LocaleMessages;
+  public readonly config: PlatformConfig & GreePlatformConfig;
 
   constructor(
     public readonly log: Logger,
-    public readonly config: PlatformConfig,
+    config: PlatformConfig,
     public readonly api: API,
   ) {
     this.socket = dgram.createSocket('udp4');
@@ -92,7 +94,7 @@ export class GreePlatform implements DynamicPlatformPlugin {
           this.log.info('Scan finished.');
           clearInterval(this.timer);
         }
-      }, this.config.scanTimout);
+      }, this.config.scanTimeout);
     });
   }
 

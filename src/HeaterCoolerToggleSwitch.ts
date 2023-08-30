@@ -1,6 +1,6 @@
 import { Service, Characteristic, CharacteristicValue, CharacteristicSetCallback, CharacteristicGetCallback } from 'homebridge';
 import { GreeAirConditioner } from './platformAccessory';
-import { SwitchName } from './settings';
+import { SwitchName } from './types';
 
 export class HeaterCoolerToggleSwitch {
   private readonly Service: typeof Service = this.parent.platform.api.hap.Service;

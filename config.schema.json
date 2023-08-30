@@ -37,6 +37,16 @@
         "placeholder": 10,
         "minimum": 3
       },
+      "scanTimeout": {
+        "title": "Scan timeout (ms)",
+        "type": "integer",
+        "default": 3000
+      },
+      "logStatus": {
+        "title": "Log update status as info",
+        "type": "boolean",
+        "default": true
+      },
       "defaultValue": {
         "title": "Default Settings",
         "type": "object",
@@ -228,7 +238,7 @@
               }
             },
             "switches": {
-              "title": "Switches",
+              "title": "Switches (Enable or disable according to your own preference）",
               "type": "string",
               "description": "Switches to enable. commas separated string. options: power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode,sleepMode",
               "placeholder": "power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode,sleepMode",
@@ -256,13 +266,23 @@
       "items": [
         {
           "key": "port",
-          "flex-basis": "30%",
+          "flex-basis": "50%",
           "description": "to receive response"
         },
         {
           "key": "scanAddress",
           "flex-basis": "50%",
           "description": "related to your network env"
+        }
+      ]
+    },
+    {
+      "type": "flex",
+      "flex-direction": "row",
+      "items": [
+        {
+          "key": "scanTimeout",
+          "flex-basis": "50%"
         },
         {
           "key": "scanCount",
@@ -270,6 +290,11 @@
           "description": "for initial device discovery"
         }
       ]
+    },
+    {
+      "key": "logStatus",
+      "flex-basis": "33%",
+      "description": "If you find the logging of updateStatus to be too verbose, you can disable it."
     },
 
     {
