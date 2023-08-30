@@ -4,7 +4,7 @@
 
 遥控器参考图片（图片来自于网络）：
 
-![遥控器](./remote-control.png)
+![遥控器](./assets/remote-control.png)
 
 ## 开/关
 

@@ -101,13 +101,13 @@ A. 如果当前插件已经启用，并已成功添加设备。可在 家庭 应
 
 A. From Home App Accessory, if this plugin has enabled and successfuly added your device.
 
-![mac_address](./device_mac.jpeg)
+![mac_address](./assets/device_mac.jpeg)
 
 B. 从 Gree+ 应用中获取
 
 B. From Gree+ App
 
-![mac_address2](./device_mac2.jpeg)
+![mac_address2](./assets/device_mac2.jpeg)
 
 ## Features/TODO
 
