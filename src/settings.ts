@@ -23,7 +23,7 @@ export const DEFAULT_DEVICE_CONFIG: BaseDeviceConfig = {
   defaultHorizontalSwing: commands.swingHorizontal.value.default,
   statusUpdateInterval: 20,
   switches:
-    'power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode,sleepMode',
+    'power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode,sleepMode,xFan',
 };
 
 export const DEFAULT_PLATFORM_CONFIG: GreePlatformConfig = {

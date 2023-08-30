@@ -149,6 +149,19 @@
 
 - 指示灯 Light (Switch)
 
+## X-Fan
+
+通风功能
+
+| label | code         |
+| ----- | ------------ |
+| 开    | `{ Blo: 1 }` |
+| 关    | `{ Blo: 0 }` |
+
+### Homekit 组件
+
+- X-Fan (Switch)
+
 ## 辅热
 
 制热模式下的功能。

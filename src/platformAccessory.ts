@@ -28,6 +28,7 @@ export class GreeAirConditioner {
   private DryModeToggle?: HeaterCoolerToggleSwitch;
   private FanModeToggle?: HeaterCoolerToggleSwitch;
   private SleepModeToggle?: HeaterCoolerToggleSwitch;
+  private xFanModeToggle?: HeaterCoolerToggleSwitch;
 
   private key: string | undefined;
   public socket: Socket;
@@ -81,6 +82,7 @@ export class GreeAirConditioner {
     this.DryModeToggle = this.initSwitch('dryMode', this.platform.messages.dryMode);
     this.FanModeToggle = this.initSwitch('fanMode', this.platform.messages.fanMode);
     this.SleepModeToggle = this.initSwitch('sleepMode', this.platform.messages.sleepMode);
+    this.xFanModeToggle = this.initSwitch('xFan', this.platform.messages.xFan);
 
     this.HeaterCooler =
       this.accessory.getService(this.platform.messages.mode) ||
@@ -511,6 +513,30 @@ export class GreeAirConditioner {
     }
   }
 
+  get xFan() {
+    return this.status[commands.xFan.code] === commands.xFan.value.on;
+  }
+
+  set xFan(value) {
+    // X-FAN在自动，风扇或加热模式下不可用
+    switch (this.status[commands.mode.code]) {
+      case commands.mode.value.auto:
+      case commands.mode.value.fan:
+      case commands.mode.value.heat:
+        break;
+      default:
+        if (value) {
+          this.sendCommand({
+            [commands.xFan.code]: commands.xFan.value.on,
+          });
+        } else {
+          this.sendCommand({
+            [commands.xFan.code]: commands.xFan.value.off,
+          });
+        }
+    }
+  }
+
   get verticalSwing() {
     return (
       this.status[commands.swingVertical.code] ===
@@ -769,6 +795,9 @@ export class GreeAirConditioner {
     }
     if (patch[commands.sleepMode.code] !== undefined) {
       this.SleepModeToggle?.update();
+    }
+    if (patch[commands.xFan.code] !== undefined) {
+      this.xFanModeToggle?.update();
     }
   }
 

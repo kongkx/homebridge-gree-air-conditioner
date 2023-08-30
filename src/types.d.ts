@@ -7,7 +7,8 @@ export type SwitchName =
   | 'light'
   | 'dryMode'
   | 'fanMode'
-  | 'sleepMode';
+  | 'sleepMode'
+  | 'xFan';
 
 export type BaseDeviceConfig = {
   hasFanMode?: boolean;
@@ -52,4 +53,5 @@ export interface LocaleMessages {
   fanMode: string;
   fanSpeed: string;
   sleepMode: string;
+  xFan: string;
 }

@@ -240,8 +240,8 @@
             "switches": {
               "title": "Switches (Enable or disable according to your own preference）",
               "type": "string",
-              "description": "Switches to enable. commas separated string. options: power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode,sleepMode",
-              "placeholder": "power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode,sleepMode",
+              "description": "Switches to enable. commas separated string. options: power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode,sleepMode,xFan",
+              "placeholder": "power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode,sleepMode,xFan",
               "condition": {
                 "functionBody": "return model.devices[arrayIndices].disabled !== true;"
               }

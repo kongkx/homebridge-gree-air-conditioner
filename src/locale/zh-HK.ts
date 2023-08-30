@@ -12,6 +12,7 @@ const messages: LocaleMessages = {
   dryMode: '除濕模式',
   fanSpeed: '風速',
   sleepMode: '睡眠模式',
+  xFan: 'X-Fan',
 };
 
 export default messages;
