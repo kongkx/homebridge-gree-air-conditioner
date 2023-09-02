@@ -21,6 +21,9 @@ export class HeaterCoolerToggleSwitch {
     this.service.getCharacteristic(this.Characteristic.On)
       .on('get', this.getOnHandler.bind(this))
       .on('set', this.setOnHandler.bind(this));
+
+    this.service.addOptionalCharacteristic(this.Characteristic.ConfiguredName);
+    this.service.setCharacteristic(this.Characteristic.ConfiguredName, parent.getConfiguredName(this.displayName));
   }
 
   getOnHandler(callback: CharacteristicGetCallback) {

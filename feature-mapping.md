@@ -66,7 +66,7 @@
 
 ### Homekit 组件
 
-- 风扇 Fan (FanV2)
+- 风扇(送风模式) Fan (FanV2)
 - 强劲模式 PowerMode (Switch)
 - 静音模式 SilentMode (Switch)
 

@@ -24,6 +24,7 @@ export const DEFAULT_DEVICE_CONFIG: BaseDeviceConfig = {
   statusUpdateInterval: 20,
   switches:
     'power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode,sleepMode,xFan',
+  subAccessoryPrefix: '',
 };
 
 export const DEFAULT_PLATFORM_CONFIG: GreePlatformConfig = {

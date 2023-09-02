@@ -22,6 +22,7 @@ export type BaseDeviceConfig = {
   statusUpdateInterval: number;
   switches: string; // commas separated string
   disabled?: boolean;
+  subAccessoryPrefix?: string;
 };
 
 export type DeviceConfig = BaseDeviceConfig & {

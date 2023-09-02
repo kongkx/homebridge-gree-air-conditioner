@@ -126,6 +126,11 @@
             "type": "string",
             "description": "options: power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode,sleepMode",
             "placeholder": "power,verticalSwing,horizontalSwing,quietMode,powerfulMode,light,dryMode,fanMode"
+          },
+          "subAccessoryPrefix": {
+            "title": "Sub Accessory Prefix",
+            "type": "string",
+            "description": "For better distinguish components in separation mode. `&lt;device&gt;` is a placeholder value that will be replaced with the device name"
           }
         }
       },
@@ -245,6 +250,14 @@
               "condition": {
                 "functionBody": "return model.devices[arrayIndices].disabled !== true;"
               }
+            },
+            "subAccessoryPrefix": {
+              "title": "Sub Accessory Prefix",
+              "type": "string",
+              "description": "To better distinguish components in separation mode. `&lt;device&gt;` is a placeholder value that will be replaced with the device name",
+              "condition": {
+                "functionBody": "return model.devices[arrayIndices].disabled !== true;"
+              }
             }
           }
         }
@@ -328,7 +341,8 @@
             }
           ]
         },
-        "defaultValue.switches"
+        "defaultValue.switches",
+        "defaultValue.subAccessoryPrefix"
       ]
     },
     {
@@ -373,7 +387,8 @@
                     }
                   ]
                 },
-                "devices[].switches"
+                "devices[].switches",
+                "devices[].subAccessoryPrefix"
               ]
             }
           ]

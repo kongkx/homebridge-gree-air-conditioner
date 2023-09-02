@@ -38,9 +38,11 @@ npm install homebridge-gree-air-conditioner -g
 
    ```bash
    ifconfig | grep broadcast
-   # result
+   # 示例
    # inet 192.168.1.102 netmask 0xffffff00 broadcast 192.168.1.255
    ```
+
+3. 或 直接使用 `255.255.255.255`
 
 **Tips**
 
@@ -51,9 +53,11 @@ How to get your scan address (broadcast address)?
 
     ```bash
     ifconfig | grep broadcast
-    # result
+    # example result
     # inet 192.168.1.102 netmask 0xffffff00 broadcast 192.168.1.255
     ```
+
+3.  Or, just try `255.255.255.255`
 
 ## 配置（自定义） Configuration (optional)
 
@@ -91,13 +95,15 @@ How to get your scan address (broadcast address)?
 }
 ```
 
-**NOTE**: remember to set `minimumTargetTemperature`, `maximumTargetTemperature` manually if you are using _Fahrenheit_ unit.
+**Caution**: remember to set `minimumTargetTemperature`, `maximumTargetTemperature` manually if you are using _Fahrenheit_ unit.
 
 原遥控器功能在插件中的实现情况，可查看文档： [功能文档](./feature-mapping.md)
 
 More info about what features have been implemented comparing to remote control, Ref: [功能文档](./feature-mapping.md)
 
-**获取 MAC 地址 [GET MAC ADDRESS]**
+## Q&A
+
+### 获取设备 MAC 地址 [GET MAC ADDRESS of device]
 
 A. 如果当前插件已经启用，并已成功添加设备。可在 家庭 应用中查看。
 
@@ -110,6 +116,26 @@ B. 从 Gree+ 应用中获取
 B. From Gree+ App
 
 ![mac_address2](./assets/device_mac2.jpeg)
+
+### 为什么没有风速自动模式 [Why no fan speed auto mode?]
+
+将风速为 `0`，即为自动模式
+
+Set fan speed to `0`.
+
+### “风速”总是与“送风模式”联动？[Does "fanSpeed" always link with the "Fan mode"?]
+
+是的，“风速”只会在有送风模式的设备上创建。因为，Homekit 里面的 HeaterCooler 没有这个“送风模式”。 如果觉得有干扰，可以取消设备设置里面的送风模式，相关组件会被自动删除。 HeaterCooler 支持的模式可以在 HeaterCooler 下进行风速调节。
+
+Yes. The "FanSpeed" is created for "Fan Mode", as the HeaterCooler in homekit does not support this mode. If you feel confusing, you may disable the `FanMode` toggle in device configuration. If so, the related accessories will be removed automatically. Fan speed for modes that HeaterCooler supports, should be set inside HeaterCooler accessory.
+
+### 可以一次设置 Sub Accessory Prefix 吗？
+
+可以。设置样式 `<device>[start:end]`, 示例：
+
+- `<device>[0:3]` 设备名称前三个字符
+- `<device>[-3:]` 设备名称后三个字符
+- `<device>[3, 6]` 中间一段字符
 
 ## Features/TODO
 

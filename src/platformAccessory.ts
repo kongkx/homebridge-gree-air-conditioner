@@ -19,6 +19,7 @@ export class GreeAirConditioner {
   private HeaterCooler: Service;
   private Fan?: Service;
 
+  private Info: Service;
   private PowerSwitch?: HeaterCoolerToggleSwitch;
   private QuietModeSwitch?: HeaterCoolerToggleSwitch;
   private LightSwitch?: HeaterCoolerToggleSwitch;
@@ -53,7 +54,7 @@ export class GreeAirConditioner {
     // try to bind device;
     this.sendBindRequest();
     // set accessory information
-    this.accessory
+    this.Info = this.accessory
       .getService(this.platform.Service.AccessoryInformation)!
       .setCharacteristic(
         this.platform.Characteristic.Manufacturer,
@@ -113,6 +114,14 @@ export class GreeAirConditioner {
         this.platform.Service.HeaterCooler,
         this.platform.messages.mode,
       );
+
+    this.HeaterCooler.addOptionalCharacteristic(
+      this.platform.Characteristic.ConfiguredName,
+    );
+    this.HeaterCooler.setCharacteristic(
+      this.platform.Characteristic.ConfiguredName,
+      this.getConfiguredName(this.platform.messages.mode),
+    );
 
     this.HeaterCooler.getCharacteristic(this.platform.Characteristic.Active)
       .on('get', this.getCharacteristic.bind(this, 'deviceActive'))
@@ -183,6 +192,15 @@ export class GreeAirConditioner {
           this.platform.Service.Fanv2,
           this.platform.messages.fanSpeed,
         );
+      this.Fan.addOptionalCharacteristic(
+        this.platform.Characteristic.ConfiguredName,
+      );
+      this.Fan.setCharacteristic(
+        this.platform.Characteristic.ConfiguredName,
+        this.getConfiguredName(
+          `${this.platform.messages.fanSpeed}(${this.platform.messages.fanMode})`,
+        ),
+      );
       this.Fan.getCharacteristic(this.platform.Characteristic.Active)
         .on('get', this.getCharacteristic.bind(this, 'fanMode'))
         .on('set', this.setCharacteristic.bind(this, 'fanMode'));
@@ -341,7 +359,6 @@ export class GreeAirConditioner {
   }
 
   get targetTemperature() {
-    this.platform.log.debug('set targetTemperature');
     const temperature = this.status[commands.targetTemperature.code] as number;
     const offset = this.status[commands.temperatureOffset.code] as number;
     if (temperature === undefined || offset === undefined) {
@@ -824,11 +841,11 @@ export class GreeAirConditioner {
 
     if (patch[commands.units.code] !== undefined) {
       this.HeaterCooler.getCharacteristic(
-        this.platform.Characteristic.CurrentTemperature
+        this.platform.Characteristic.CurrentTemperature,
       ).updateValue(this.currentTemperature);
       this.HeaterCooler.getCharacteristic(
-        this.platform.Characteristic.TargetTemperature
-      ).updateValue(this.targetTemperature)
+        this.platform.Characteristic.TargetTemperature,
+      ).updateValue(this.targetTemperature);
     }
 
     // update accessory characteristic
@@ -863,6 +880,9 @@ export class GreeAirConditioner {
     }
     if (patch[commands.xFan.code] !== undefined) {
       this.xFanModeToggle?.update();
+    }
+    if (patch[commands.light.code] !== undefined) {
+      this.LightSwitch?.update();
     }
   }
 
@@ -974,6 +994,24 @@ export class GreeAirConditioner {
         this.accessory.removeService(service);
       }
     }
+  }
+
+  getConfiguredName(name: string) {
+    const subAccessoryPrefix = this.getConfig('subAccessoryPrefix');
+    if (subAccessoryPrefix === '<device>') {
+      return `${this.getName()} ${name}`;
+    }
+    const match = /<device>\[(-?\d?):(-?\d?)\]/.exec(subAccessoryPrefix);
+    if (match) {
+      const start = match[1] ? Number(match[1]) : 0;
+      const end = match[2] ? Number(match[2]) : undefined;
+      const prefix = this.getName().substring(start, end);
+      return `${prefix} ${name}`;
+    }
+    if (subAccessoryPrefix) {
+      return `${subAccessoryPrefix} ${name}`;
+    }
+    return name;
   }
 }
 
