@@ -91,6 +91,8 @@ How to get your scan address (broadcast address)?
 }
 ```
 
+**NOTE**: remember to set `minimumTargetTemperature`, `maximumTargetTemperature` manually if you are using _Fahrenheit_ unit.
+
 原遥控器功能在插件中的实现情况，可查看文档： [功能文档](./feature-mapping.md)
 
 More info about what features have been implemented comparing to remote control, Ref: [功能文档](./feature-mapping.md)
@@ -117,7 +119,7 @@ B. From Gree+ App
 - [x] 可配置功能开关的启用。示例：当 `switches` 设置为 `power,light` 时， 仅启用电源，灯光控制开关，其他强劲模式、静音模式等开关均不启用。
 
 - [x] 电源控制
-- [x] 温度调节
+- [x] 温度调节 （可选择摄氏温度或华氏温度）
 - [x] 模式调节 （不支持 送风，除湿）
 - [x] 送风模式、除湿模式开关
 - [x] 风速调节
