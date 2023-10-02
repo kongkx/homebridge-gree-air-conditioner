@@ -40,3 +40,9 @@ export const DEFAULT_PLATFORM_CONFIG: GreePlatformConfig = {
 };
 
 export const UDP_SCAN_PORT = 7000;
+
+// 自动模式温度范围
+export const AUTO_MIN_F = 68;
+export const AUTO_MAX_F = 77;
+export const AUTO_MIN_C = 20;
+export const AUTO_MAX_C = 25;
