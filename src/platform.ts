@@ -28,6 +28,7 @@ export class GreePlatform implements DynamicPlatformPlugin {
   socket: dgram.Socket;
   devices: Record<string, PlatformAccessory>;
   initializedDevices: Record<string, boolean>;
+  initializing: Record<string, boolean>;
   scanCount: number;
   timer: NodeJS.Timeout | undefined;
   messages: LocaleMessages;
@@ -41,6 +42,7 @@ export class GreePlatform implements DynamicPlatformPlugin {
     this.socket = dgram.createSocket('udp4');
     this.devices = {};
     this.initializedDevices = {};
+    this.initializing = {};
     this.config = {
       ...DEFAULT_PLATFORM_CONFIG,
       ...config,
@@ -123,6 +125,10 @@ export class GreePlatform implements DynamicPlatformPlugin {
     const deviceConfig = this.config.devices.find((item) => item.mac === deviceInfo.mac);
     let accessory = this.devices[deviceInfo.mac];
 
+    if (this.initializing[deviceInfo.mac]) {
+      return;
+    }
+
     if (deviceConfig?.disabled) {
       this.log.info(`accessory ${deviceInfo.mac} skipped`);
       if (accessory) {
@@ -138,6 +144,7 @@ export class GreePlatform implements DynamicPlatformPlugin {
 
     if (!accessory) {
       const deviceName = deviceConfig?.name ?? deviceInfo.name;
+      this.initializing[deviceInfo.mac] = true;
       this.log.debug(`Initializing new accessory ${deviceInfo.mac} with name ${deviceName}...`);
       const uuid = this.api.hap.uuid.generate(deviceInfo.mac);
       accessory = new this.api.platformAccessory(deviceInfo.mac, uuid);
@@ -150,6 +157,7 @@ export class GreePlatform implements DynamicPlatformPlugin {
       // mark devices as initialized.
       accessory.context.device = deviceInfo;
       this.initializedDevices[accessory.UUID] = true;
+      this.initializing[deviceInfo.mac] = false;
       return new GreeAirConditioner(this, accessory, deviceConfig);
     }
   };

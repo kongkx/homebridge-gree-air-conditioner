@@ -1,7 +1,7 @@
 {
   "displayName": "Gree air conditioner",
   "name": "homebridge-gree-air-conditioner",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "A simple gree air conditioner platform for homebridge",
   "license": "Apache-2.0",
   "repository": {
