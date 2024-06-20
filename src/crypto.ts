@@ -10,6 +10,8 @@ export default {
   },
   decrypt: (data, key = genericKey) => {
     const decipher = crypto.createDecipheriv('aes-128-ecb', key, null);
-    return JSON.parse(decipher.update(data, 'base64', 'utf8') + decipher.final('utf8'));
+    return JSON.parse(
+      decipher.update(data, 'base64', 'utf8') + decipher.final('utf8')
+    );
   },
 };

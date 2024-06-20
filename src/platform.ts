@@ -1,8 +1,22 @@
 import dgram from 'dgram';
 import crypto from './crypto';
-import { API, DynamicPlatformPlugin, Logger, PlatformAccessory, PlatformConfig, Service, Characteristic } from 'homebridge';
+import {
+  API,
+  DynamicPlatformPlugin,
+  Logger,
+  PlatformAccessory,
+  PlatformConfig,
+  Service,
+  Characteristic,
+} from 'homebridge';
 
-import { PLATFORM_NAME, PLUGIN_NAME, DEFAULT_DEVICE_CONFIG, DEFAULT_PLATFORM_CONFIG, UDP_SCAN_PORT } from './settings';
+import {
+  PLATFORM_NAME,
+  PLUGIN_NAME,
+  DEFAULT_DEVICE_CONFIG,
+  DEFAULT_PLATFORM_CONFIG,
+  UDP_SCAN_PORT,
+} from './settings';
 import { GreeAirConditioner } from './platformAccessory';
 import { GreePlatformConfig, LocaleMessages } from './types';
 
@@ -21,7 +35,8 @@ function readLocaleMessages(locale) {
  */
 export class GreePlatform implements DynamicPlatformPlugin {
   public readonly Service: typeof Service = this.api.hap.Service;
-  public readonly Characteristic: typeof Characteristic = this.api.hap.Characteristic;
+  public readonly Characteristic: typeof Characteristic =
+    this.api.hap.Characteristic;
 
   // this is used to track restored cached accessories
   public readonly accessories;
@@ -37,7 +52,7 @@ export class GreePlatform implements DynamicPlatformPlugin {
   constructor(
     public readonly log: Logger,
     config: PlatformConfig,
-    public readonly api: API,
+    public readonly api: API
   ) {
     this.socket = dgram.createSocket('udp4');
     this.devices = {};
@@ -71,13 +86,26 @@ export class GreePlatform implements DynamicPlatformPlugin {
 
   broadcastScan() {
     const message = Buffer.from(JSON.stringify({ t: 'scan' }));
-    this.socket.send(message, 0, message.length, UDP_SCAN_PORT, this.config.scanAddress, () => {
-      this.log.debug(`Broadcast '${message}' ${this.config.scanAddress}:${UDP_SCAN_PORT}`);
-    });
+    this.socket.send(
+      message,
+      0,
+      message.length,
+      UDP_SCAN_PORT,
+      this.config.scanAddress,
+      () => {
+        this.log.debug(
+          `Broadcast '${message}' ${this.config.scanAddress}:${UDP_SCAN_PORT}`
+        );
+      }
+    );
   }
 
   configureAccessory(accessory: PlatformAccessory) {
-    this.log.info('Loading accessory from cache:', accessory.displayName, accessory.context.device);
+    this.log.info(
+      'Loading accessory from cache:',
+      accessory.displayName,
+      accessory.context.device
+    );
 
     // add the restored accessory to the accessories cache so we can track if it has already been registered
     if (accessory.context.device?.mac) {
@@ -122,7 +150,9 @@ export class GreePlatform implements DynamicPlatformPlugin {
   };
 
   registerDevice = (deviceInfo) => {
-    const deviceConfig = this.config.devices.find((item) => item.mac === deviceInfo.mac);
+    const deviceConfig = this.config.devices.find(
+      (item) => item.mac === deviceInfo.mac
+    );
     let accessory = this.devices[deviceInfo.mac];
 
     if (this.initializing[deviceInfo.mac]) {
@@ -132,7 +162,9 @@ export class GreePlatform implements DynamicPlatformPlugin {
     if (deviceConfig?.disabled) {
       this.log.info(`accessory ${deviceInfo.mac} skipped`);
       if (accessory) {
-        this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+        this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [
+          accessory,
+        ]);
         delete this.devices[deviceConfig.mac];
       }
       return;
@@ -145,12 +177,16 @@ export class GreePlatform implements DynamicPlatformPlugin {
     if (!accessory) {
       const deviceName = deviceConfig?.name ?? deviceInfo.name;
       this.initializing[deviceInfo.mac] = true;
-      this.log.debug(`Initializing new accessory ${deviceInfo.mac} with name ${deviceName}...`);
+      this.log.debug(
+        `Initializing new accessory ${deviceInfo.mac} with name ${deviceName}...`
+      );
       const uuid = this.api.hap.uuid.generate(deviceInfo.mac);
       accessory = new this.api.platformAccessory(deviceInfo.mac, uuid);
 
       this.devices[deviceInfo.mac] = accessory;
-      this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+      this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [
+        accessory,
+      ]);
     }
 
     if (accessory) {
@@ -161,5 +197,4 @@ export class GreePlatform implements DynamicPlatformPlugin {
       return new GreeAirConditioner(this, accessory, deviceConfig);
     }
   };
-
 }
