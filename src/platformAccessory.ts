@@ -864,6 +864,10 @@ export class GreeAirConditioner {
       `[${this.getDeviceLabel()}] Send commands: %j`,
       commands
     );
+    const disableBeep = this.getConfig('disableBeep');
+    if (disableBeep) {
+      commands['Buzzer_ON_OFF'] = 1;
+    }
     const keys = Object.keys(commands);
     const values = keys.map((k) => commands[k]);
     const message = {

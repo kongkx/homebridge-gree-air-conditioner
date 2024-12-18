@@ -116,6 +116,9 @@ const commands = {
   time: {
     code: 'time',
   },
+  buzzer: {
+    code: 'Buzzer_ON_OFF'
+  }
 };
 
 export default commands;

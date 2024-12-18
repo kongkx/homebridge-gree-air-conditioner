@@ -23,6 +23,7 @@ export type BaseDeviceConfig = {
   switches: string; // commas separated string
   disabled?: boolean;
   subAccessoryPrefix?: string;
+  disableBeep?: boolean;
 };
 
 export type DeviceConfig = BaseDeviceConfig & {

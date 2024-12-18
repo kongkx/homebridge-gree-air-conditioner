@@ -156,11 +156,12 @@ export class GreePlatform implements DynamicPlatformPlugin {
     let accessory = this.devices[deviceInfo.mac];
 
     if (this.initializing[deviceInfo.mac]) {
+      this.log.info('`skip initializing as initialized...');
       return;
     }
 
     if (deviceConfig?.disabled) {
-      this.log.info(`accessory ${deviceInfo.mac} skipped`);
+      this.log.info(`accessory ${deviceInfo.mac} skipped as disabled`);
       if (accessory) {
         this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [
           accessory,

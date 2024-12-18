@@ -58,6 +58,11 @@
             "minimum": 1,
             "maximum": 600
           },
+          "disableBeep": {
+            "title": "Disable command beep",
+            "type": "boolean",
+            "default": false
+          },
           "sensorOffset": {
             "title": "Temperature Offset",
             "type": "integer",
@@ -160,6 +165,14 @@
               "default": 10,
               "minimum": 1,
               "maximum": 600,
+              "condition": {
+                "functionBody": "return model.devices[arrayIndices].disabled !== true;"
+              }
+            },
+            "disableBeep": {
+              "title": "Disable command beep",
+              "type": "boolean",
+              "default": false,
               "condition": {
                 "functionBody": "return model.devices[arrayIndices].disabled !== true;"
               }
@@ -325,8 +338,7 @@
               "flex-basis": "50%",
               "items": [
                 "defaultValue.defaultSpeed",
-                "defaultValue.defaultVerticalSwing",
-                "defaultValue.defaultHorizontalSwing"
+                "defaultValue.defaultVerticalSwing"
               ]
             },
             {
@@ -334,13 +346,21 @@
               "flex-basis": "50%",
               "items": [
                 "defaultValue.sensorOffset",
-                "defaultValue.hasFanMode",
-                "defaultValue.hasDryMode",
-                "defaultValue.statusUpdateInterval"
+                "defaultValue.defaultHorizontalSwing"
               ]
             }
           ]
         },
+        {
+          "type": "flex",
+          "flex-direction": "row",
+          "items": [
+            "defaultValue.hasFanMode",
+            "defaultValue.hasDryMode",
+            "defaultValue.disableBeep"
+          ]
+        },
+        "defaultValue.statusUpdateInterval",
         "defaultValue.switches",
         "defaultValue.subAccessoryPrefix"
       ]
@@ -370,8 +390,7 @@
                       "items": [
                         "devices[].mac",
                         "devices[].defaultSpeed",
-                        "devices[].defaultVerticalSwing",
-                        "devices[].defaultHorizontalSwing"
+                        "devices[].defaultVerticalSwing"
                       ]
                     },
                     {
@@ -380,13 +399,21 @@
                       "items": [
                         "devices[].name",
                         "devices[].sensorOffset",
-                        "devices[].hasFanMode",
-                        "devices[].hasDryMode",
-                        "devices[].statusUpdateInterval"
+                        "devices[].defaultHorizontalSwing"
                       ]
                     }
                   ]
                 },
+                {
+                  "type": "flex",
+                  "flex-direction": "row",
+                  "items": [
+                    "devices[].hasFanMode",
+                    "devices[].hasDryMode",
+                    "devices[].disableBeep"
+                  ]
+                },
+                "devices[].statusUpdateInterval",
                 "devices[].switches",
                 "devices[].subAccessoryPrefix"
               ]
